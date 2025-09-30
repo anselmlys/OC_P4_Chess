@@ -1,7 +1,9 @@
 from src.model.tournament import Tournament
+from src.model.tournament import Tournament
 
 
 def main():
+    players_filepath = "data/player/players.json"
     players_filepath = "data/player/players.json"
 
     tournament1 = Tournament("first", "Paris", 19950909)

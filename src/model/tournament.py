@@ -1,8 +1,12 @@
 import json
 import random
+import json
+import random
 from dataclasses import dataclass, field
 from datetime import date
 
+from src.model.round import Round
+from src.model.player import InGamePlayer
 from src.model.round import Round
 from src.model.player import InGamePlayer
 
@@ -13,6 +17,7 @@ class Tournament:
     place: str
     start_date: date
     end_date: date | None = None
+    players: list[InGamePlayer] = field(default_factory=list)
     players: list[InGamePlayer] = field(default_factory=list)
     number_of_rounds: int = 4
     current_round_number: int = 1
