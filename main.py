@@ -1,14 +1,23 @@
-from src.model.player import Player
+from src.model.tournament import Tournament
 
 
 def main():
-    filepath = "data/player/players.json"
+    players_filepath = "data/player/players.json"
 
-    player1 = Player('Smith', 'John', '09091999', 'HG63735')
-    player1.save_new_player(filepath)
+    tournament1 = Tournament("first", "Paris", 19950909)
+    tournament1.add_players(players_filepath)
+    tournament1.start_tournament()
+    tournament1.rounds[0].create_matches()
+    print(tournament1.rounds[0].matches)
 
-    player2 = Player('Doe', 'Jane', '05051995', 'JG83954')
-    player2.save_new_player(filepath)
+    print(tournament1.rounds[0].matches[0].finished)
+    tournament1.rounds[0].matches[0].end_match("player1")
+    print(tournament1.rounds[0].matches[0].finished)
+    print(tournament1.rounds[0].matches[0])
+
+    print(tournament1.players)
+
+    
 
 
 if __name__ == "__main__":
