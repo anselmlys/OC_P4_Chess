@@ -8,8 +8,6 @@ from pathlib import Path
 
 national_chess_id_format = re.compile(r"^[a-zA-Z]{2}[0-9]{5}$")
 
-national_chess_id_format = re.compile(r"^[a-zA-Z]{2}[0-9]{5}$")
-
 @dataclass
 class Player:
     last_name: str
@@ -17,12 +15,6 @@ class Player:
     date_of_birth: date
     national_chess_id: str
 
-    def __post_init__(self):
-        if not national_chess_id_format.match(self.national_chess_id):
-            raise ValueError("Format attendu : deux lettres puis cinq chiffres")
-
-    def save_new_player_information(self, filepath):
-        '''Save the player data in the json file storing player information'''
     def __post_init__(self):
         if not national_chess_id_format.match(self.national_chess_id):
             raise ValueError("Format attendu : deux lettres puis cinq chiffres")

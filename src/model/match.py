@@ -31,17 +31,3 @@ class Match:
         return (f"([{self.player1}, {self.player1.score}]," 
                 f"[{self.player2}, {self.player2.score}])")
     
-    def end_match(self, winner):
-        '''Add the points to the score of the winner and set the match to finished'''
-        match winner:
-            case "player1":
-                self.player1.score += 1
-                self.winner = self.player1
-            case "player2":
-                self.player2.score += 1
-                self.winner = self.player2
-            case "draw":
-                self.player1.score += 0.5
-                self.player2.score += 0.5
-                self.winner = "draw"
-        self.finished = True
