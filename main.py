@@ -23,8 +23,10 @@ def main():
     tournament1.rounds[0].matches[1].end_match("player2")
     tournament1.rounds[0].matches[2].end_match("draw")
 
+    print(tournament1.rounds[0].end_datetime)
+
     
-    #Round 2
+    '''#Round 2
 
     tournament1.continue_tournament()
     tournament1.rounds[1].create_matches()
@@ -79,7 +81,7 @@ def main():
 
     tournament1.rounds[5].matches[0].end_match("player1")
     tournament1.rounds[5].matches[1].end_match("player2")
-    tournament1.rounds[5].matches[2].end_match("draw")
+    tournament1.rounds[5].matches[2].end_match("draw")'''
 
 
 if __name__ == "__main__":
