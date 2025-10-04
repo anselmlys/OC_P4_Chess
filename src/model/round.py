@@ -10,11 +10,6 @@ class Round:
         self.start_datetime = datetime.now().strftime("%Y-%m-%d %H:%m")
         self.end_datetime: datetime | None = None
         self.matches: list = []
-
-    def __post_init__(self):
-        #Link observer to the objects it wants to listen to
-        for match in self.matches:
-            match.add_listener(self._on_match_finished)
         
     @property
     def finished(self) -> bool:
@@ -29,6 +24,7 @@ class Round:
             match = Match(pair)
             self.matches.append(match)
 
+        #Link observer to the objects (matches) it wants to listen to
         for match in self.matches:
             match.add_listener(self._on_match_finished)
 
