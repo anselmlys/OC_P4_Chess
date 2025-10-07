@@ -4,7 +4,9 @@ from functools import cached_property
 from itertools import groupby, combinations
 from dataclasses import dataclass, field
 from datetime import date
+from pathlib import Path
 
+from src.constants import TOURNAMENT_DB_FOLDER
 from src.model.round import Round
 from src.model.player import InGamePlayer
 
@@ -17,9 +19,10 @@ class Tournament:
     end_date: date | None = None
     players: list[InGamePlayer] = field(default_factory=list)
     number_of_rounds: int = 4
-    current_round_number: int = 1
+    current_round_number: int = 0
     rounds: list[Round] = field(default_factory=list)
     description: str | None = None
+    db_filepath: str | None = None
 
     @cached_property
     def unique_pairs(self) -> list:
@@ -42,18 +45,17 @@ class Tournament:
 
     def add_players(self, players_filepath):
         '''Add the players of a json file to the tournament.'''
-        player_number = 1
         with open(players_filepath, "r", encoding='utf-8') as players_file:
             players_data = json.load(players_file)
             for player_data in players_data["players"]:
-                in_game_player = InGamePlayer(player_data, player_number)
+                in_game_player = InGamePlayer(player_data)
                 self.players.append(in_game_player)
-                player_number += 1
 
-    def create_new_round(self, shuffled_players):
+    def create_new_round(self, pair_of_players):
         '''Create a new round in the tournament.'''
+        self.current_round_number += 1
         round_name = f"Round {self.current_round_number}"
-        round = Round(round_name, shuffled_players)
+        round = Round(round_name, pair_of_players)
         self.rounds.append(round)
 
     def create_random_pairs(self):
@@ -105,15 +107,6 @@ class Tournament:
                 pair_of_players.append(pair)
 
         return pair_of_players
-    
-    def start_tournament(self):
-        '''Create the first round of the tournament'''
-        number_of_players = len(self.players)
-        if (number_of_players % 2) == 0:
-            pair_of_players = self.create_random_pairs()
-            self.create_new_round(pair_of_players)
-        else:
-            print("Nombre de joueur est impair!")
         
     def continue_tournament(self):
         #Check if there are remaining rounds to play or not
@@ -141,3 +134,58 @@ class Tournament:
         else:
             #A déplacer dans "view"
             print("Le tournoi est terminé !")
+
+    def create_json_file(self) -> str:
+        '''Create the file that will store the tournament data'''
+        filename = ''.join(e for e in self.name if e.isalnum())
+        filepath = f"{TOURNAMENT_DB_FOLDER}/{filename}.json"
+        tournament_file = Path(filepath)
+        n = 1
+        while tournament_file.is_file():
+            filepath = f"{TOURNAMENT_DB_FOLDER}/{filename}({n}).json"
+            tournament_file = Path(filepath)
+            n += 1
+        with open(filepath, 'w', encoding='utf-8') as json_file:
+            data = {}
+            json.dump(data, json_file, indent=4, ensure_ascii=False)
+        self.db_filepath = filepath
+
+    def save_tournament_information(self):
+        '''Save the tournament info in a json file'''
+        with open(self.db_filepath, 'w', encoding='utf-8') as json_file:
+            players_data = []
+            for player in self.players:
+                player_info = {
+                    "national_chess_id": player.player["national_chess_id"],
+                    "last_name": player.player["last_name"],
+                    "first_name": player.player["first_name"],
+                    "score": player.score,
+                    }
+                players_data.append(player_info)
+
+            rounds_data = []
+            for round in self.rounds:
+                    matches_data = []
+                    for match in round.matches:
+                        match_info = str(match)
+                        matches_data.append(match_info)
+                    round_info = {
+                        "name": round.name,
+                        "start_datetime": round.start_datetime,
+                        "end_datetime": round.end_datetime,
+                        "matches": matches_data,
+                    }
+                    rounds_data.append(round_info)
+
+            data = {
+                "name": self.name,
+                "start_date": self.start_date,
+                "end_date": self.end_date,
+                "players": players_data,
+                "number_of_rounds": self.number_of_rounds,
+                "current_round_number": self.current_round_number,
+                "rounds": rounds_data,
+                "description": self.description,
+                "db_filepath": self.db_filepath,
+            }
+            json.dump(data, json_file, indent=4, ensure_ascii=False)

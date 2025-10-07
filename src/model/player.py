@@ -29,12 +29,10 @@ class Player:
 
 
 class InGamePlayer:
-    def __init__(self, player: Player, number: int):
-        self.player = player
-        self.number = number
+    def __init__(self, player: Player):
+        self.player= player
         self.score = 0
 
     def __repr__(self):
-        return (f"{self.number}- "
-                f"{self.player['last_name']} {self.player['first_name']}"
-                f" - {self.score}")
+        return (f"{self.player['national_chess_id']}-"
+                f"{self.player['last_name']} {self.player['first_name']}")

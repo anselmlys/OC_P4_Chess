@@ -1,7 +1,7 @@
-from src.constants import BIRTHDATE_FORMAT, NATIONAL_CHESS_ID_FORMAT, NAME_FORMAT
+from src.constants import DATE_FORMAT, NATIONAL_CHESS_ID_FORMAT, NAME_FORMAT
 
 
-class PlayerView:
+class PlayerRegisterView:
     def prompt_player_last_name(self):
         last_name = input("\nEntrez le nom de famille du joueur : ")
         if not NAME_FORMAT.match(last_name):
@@ -20,7 +20,7 @@ class PlayerView:
     
     def prompt_player_date_of_birth(self):
         date_of_birth = input("Entrez la date de naissance du joueur en format AAAA-MM-JJ : ")
-        if not BIRTHDATE_FORMAT.match(date_of_birth):
+        if not DATE_FORMAT.match(date_of_birth):
             print('Attention : mauvais format de date.')
             self.prompt_player_date_of_birth()
         else:

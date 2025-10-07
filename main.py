@@ -1,16 +1,21 @@
 from src.controller.menu_controller import MenuController
 from src.controller.player_controller import PlayerController
+from src.controller.tournament_controller import TournamentController
 from src.view.main_menu_view import MainMenuView
-from src.view.player_view import PlayerView
+from src.view.player.register_view import PlayerRegisterView
+from src.view.tournament.creation_view import TournamentCreationView
 
 
 def main():
     main_menu_view = MainMenuView()
-    player_view = PlayerView()
-    player_controller = PlayerController(player_view)
-    menu_controller = MenuController(main_menu_view, player_controller)
-    menu_controller.main_menu_user_choice()
+    player_view = PlayerRegisterView()
+    tournament_view = TournamentCreationView()
 
+    player_controller = PlayerController(player_view)
+    tournament_controller = TournamentController(tournament_view)
+    menu_controller = MenuController(main_menu_view, player_controller, tournament_controller)
+
+    menu_controller.main_menu_user_choice()
 
 
 if __name__ == "__main__":

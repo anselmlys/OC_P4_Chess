@@ -1,15 +1,16 @@
 from datetime import datetime
+from dataclasses import dataclass, field
 
 from src.model.match import Match
 
 
+@dataclass
 class Round:
-    def __init__(self, name: str, pair_of_players: list):
-        self.name: str = name
-        self.pair_of_players: list = pair_of_players
-        self.start_datetime = datetime.now().strftime("%Y-%m-%d %H:%m")
-        self.end_datetime: datetime | None = None
-        self.matches: list = []
+    name: str
+    pair_of_players: list
+    start_datetime: datetime = datetime.now().strftime("%Y-%m-%d %H:%m")
+    end_datetime: datetime | None = None
+    matches: list = field(default_factory=list)
         
     @property
     def finished(self) -> bool:
