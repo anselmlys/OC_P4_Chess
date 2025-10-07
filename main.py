@@ -35,7 +35,7 @@ def main():
 
     menu_controller.main_menu_user_choice()
 '''
-    tournament = Tournament("encore un test", "lieu", "2025-10-07")
+    '''tournament = Tournament("nouveau", "lieu", "2025-10-07")
     tournament.add_players(PLAYER_DB_FILEPATH)
     tournament.get_unique_pairs()
     pair_of_players = tournament.create_random_pairs()
@@ -45,7 +45,14 @@ def main():
     tournament.rounds[0].matches[1].end_match("player1")
     tournament.rounds[0].matches[2].end_match("player1")
     tournament.create_json_file()
-    tournament.save_tournament_bis()
+    tournament.save_tournament_information()'''
+
+    json_file = "data/tournaments/encoreuntest.json"
+    tournament = Tournament.get_tournament_information(json_file)
+    print(tournament.name)
+    print(tournament.rounds[0].matches[0]._listeners)
+
+    
 
     
 

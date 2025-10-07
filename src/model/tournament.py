@@ -36,19 +36,51 @@ class Tournament:
         return previous_pairs
 
     def transform_to_dict(self):
+        unique_pairs_left = [
+            [a.transform_to_dict(), b.transform_to_dict()] for a, b in self.unique_pairs_left
+        ]
+
         return {
             "name": self.name,
             "place": self.place,
             "start_date": self.start_date,
-            "end_date": self.end_date.isoformat() if self.end_date else None,
+            "end_date": self.end_date,
             "players": [player.transform_to_dict() for player in self.players],
             "number_of_rounds": self.number_of_rounds,
             "current_round_number": self.current_round_number,
             "rounds": [round.transform_to_dict() for round in self.rounds],
             "description": self.description,
-            "unique_pairs_left": [[a.transform_to_dict(), b.transform_to_dict()] for a, b in self.unique_pairs_left],
+            "unique_pairs_left": unique_pairs_left,
             "db_filepath": self.db_filepath,
         }
+    
+    @classmethod
+    def transform_from_dict(cls, json_data):
+        players = [
+            InGamePlayer.transform_from_dict(player) for player in json_data["players"]
+        ]
+        rounds = [
+            Round.transform_from_dict(round) for round in json_data["rounds"]
+        ]
+        unique_pairs_left = [
+            (InGamePlayer.transform_from_dict(a),
+             InGamePlayer.transform_from_dict(b)) 
+             for a, b in json_data["unique_pairs_left"]
+        ]
+
+        return cls(
+            name=json_data["name"],
+            place=json_data["place"],
+            start_date=json_data["start_date"],
+            end_date=json_data["end_date"],
+            players=players,
+            number_of_rounds=json_data["number_of_rounds"],
+            current_round_number=json_data["current_round_number"],
+            rounds=rounds,
+            description=json_data["description"],
+            unique_pairs_left=unique_pairs_left,
+            db_filepath=json_data["db_filepath"],
+        )
 
     def add_players(self, players_filepath):
         '''Add the players of a json file to the tournament.'''
@@ -170,3 +202,9 @@ class Tournament:
     def save_tournament_information(self):
         with open(self.db_filepath, 'w', encoding='utf-8') as json_file:
             json.dump(self.transform_to_dict(), json_file, indent=4, ensure_ascii=False)
+
+    def get_tournament_information(json_file):
+        with open(json_file, "r", encoding="utf-8") as tournament_file:
+            tournament_data = json.load(tournament_file)
+            tournament = Tournament.transform_from_dict(tournament_data)
+        return tournament

@@ -1,3 +1,6 @@
+from src.model.player import InGamePlayer
+
+
 class Match:
     def __init__(self, pair_of_players):
         self.player1 = pair_of_players[0]
@@ -18,6 +21,17 @@ class Match:
             "winner": self.finished,
         }
     
+    @classmethod
+    def transform_from_dict(cls, json_data):
+        player1 = InGamePlayer.transform_from_dict(json_data["player1"])
+        player2 = InGamePlayer.transform_from_dict(json_data["player2"])
+        pair_of_players = [player1, player2]
+        match = cls(pair_of_players=pair_of_players)
+        match.finished = json_data["finished"]
+        match.winner = json_data["winner"]
+        
+        return match
+    
     def add_listener(self, callback):
         '''Allow observers (here "Round") to listen to changes'''
         self._listeners.append(callback)
@@ -32,14 +46,14 @@ class Match:
         match winner:
             case "player1":
                 self.player1.score += 1
-                self.winner = self.player1
+                self.winner = winner
             case "player2":
                 self.player2.score += 1
-                self.winner = self.player2
+                self.winner = winner
             case "draw":
                 self.player1.score += 0.5
                 self.player2.score += 0.5
-                self.winner = "draw"
+                self.winner = winner
         self.finished = True
         self._notify()
 

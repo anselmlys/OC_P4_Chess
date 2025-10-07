@@ -40,14 +40,11 @@ class TournamentController:
                    "Veuillez ajouter un nouveau joueur avant de continuer.\n"))
             
     def select_tournament(self, choice):
-        #choice = self.selector_view.prompt_tournament_to_select()
+        choice = self.selector_view.prompt_tournament_to_select()
         filename = ''.join(e for e in choice if e.isalnum())
         filepath = f"{TOURNAMENT_DB_FOLDER}/{filename}.json"
-        with open(filepath, "r", encoding='utf-8') as tournament_file:
-            tournament_data = json.load(tournament_file)
-            tournament = Tournament(tournament_data)
+        tournament = Tournament.get_tournament_information(filepath)
         return tournament
             
-    
     def run_tournament(self, tournament):
         pass
