@@ -1,6 +1,3 @@
-from src.model.player import InGamePlayer
-
-
 class Match:
     def __init__(self, pair_of_players):
         self.player1 = pair_of_players[0]
@@ -12,6 +9,14 @@ class Match:
     def __repr__(self):
         return (f"([{self.player1}, {self.player1.score}]," 
                 f"[{self.player2}, {self.player2.score}])")
+    
+    def transform_to_dict(self):
+        return {
+            "player1": self.player1.transform_to_dict(),
+            "player2": self.player2.transform_to_dict(),
+            "finished": self.finished,
+            "winner": self.finished,
+        }
     
     def add_listener(self, callback):
         '''Allow observers (here "Round") to listen to changes'''

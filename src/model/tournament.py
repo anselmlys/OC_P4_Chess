@@ -8,7 +8,7 @@ from pathlib import Path
 
 from src.constants import TOURNAMENT_DB_FOLDER
 from src.model.round import Round
-from src.model.player import InGamePlayer
+from src.model.player import InGamePlayer, Player
 
 
 @dataclass
@@ -22,17 +22,9 @@ class Tournament:
     current_round_number: int = 0
     rounds: list[Round] = field(default_factory=list)
     description: str | None = None
+    unique_pairs_left: list = field(default_factory=list)
     db_filepath: str | None = None
 
-    @cached_property
-    def unique_pairs(self) -> list:
-        '''Get all possible unique pairs of players'''
-        self.unique_pairs = []
-        unique_pairs_in_tuple = combinations(self.players, 2)
-        for a, b in unique_pairs_in_tuple:
-            self.unique_pairs.append(set([a, b]))
-        return self.unique_pairs
-    
     @property
     def previous_pairs(self) -> list:
         '''Get the pair of players that already played against eachother
@@ -43,14 +35,39 @@ class Tournament:
                 previous_pairs.append(set([a, b]))
         return previous_pairs
 
+    def transform_to_dict(self):
+        return {
+            "name": self.name,
+            "place": self.place,
+            "start_date": self.start_date,
+            "end_date": self.end_date.isoformat() if self.end_date else None,
+            "players": [player.transform_to_dict() for player in self.players],
+            "number_of_rounds": self.number_of_rounds,
+            "current_round_number": self.current_round_number,
+            "rounds": [round.transform_to_dict() for round in self.rounds],
+            "description": self.description,
+            "unique_pairs_left": [[a.transform_to_dict(), b.transform_to_dict()] for a, b in self.unique_pairs_left],
+            "db_filepath": self.db_filepath,
+        }
+
     def add_players(self, players_filepath):
         '''Add the players of a json file to the tournament.'''
         with open(players_filepath, "r", encoding='utf-8') as players_file:
             players_data = json.load(players_file)
             for player_data in players_data["players"]:
-                in_game_player = InGamePlayer(player_data)
+                player = Player(last_name=player_data["last_name"],
+                                first_name=player_data["first_name"],
+                                date_of_birth=player_data["date_of_birth"],
+                                national_chess_id=player_data["national_chess_id"])
+                in_game_player = InGamePlayer(player)
                 self.players.append(in_game_player)
 
+    def get_unique_pairs(self) -> list:
+        '''Get all possible unique pairs of players'''
+        unique_pairs_in_tuple = combinations(self.players, 2)
+        for a, b in unique_pairs_in_tuple:
+            self.unique_pairs_left.append(set([a, b]))
+    
     def create_new_round(self, pair_of_players):
         '''Create a new round in the tournament.'''
         self.current_round_number += 1
@@ -118,11 +135,11 @@ class Tournament:
 
                 #Remove pairs who played together from unique pairs list
                 for previous_pair in self.previous_pairs:
-                    if previous_pair in self.unique_pairs:
-                        self.unique_pairs.remove(previous_pair)
+                    if previous_pair in self.unique_pairs_left:
+                        self.unique_pairs_left.remove(previous_pair)
 
                 #Check if there are still unique pairs available or not
-                if self.unique_pairs:
+                if self.unique_pairs_left:
                     pair_of_players = self.create_unique_pairs(self.previous_pairs)
                 else:
                     pair_of_players = self.create_random_pairs()
@@ -151,41 +168,5 @@ class Tournament:
         self.db_filepath = filepath
 
     def save_tournament_information(self):
-        '''Save the tournament info in a json file'''
         with open(self.db_filepath, 'w', encoding='utf-8') as json_file:
-            players_data = []
-            for player in self.players:
-                player_info = {
-                    "national_chess_id": player.player["national_chess_id"],
-                    "last_name": player.player["last_name"],
-                    "first_name": player.player["first_name"],
-                    "score": player.score,
-                    }
-                players_data.append(player_info)
-
-            rounds_data = []
-            for round in self.rounds:
-                    matches_data = []
-                    for match in round.matches:
-                        match_info = str(match)
-                        matches_data.append(match_info)
-                    round_info = {
-                        "name": round.name,
-                        "start_datetime": round.start_datetime,
-                        "end_datetime": round.end_datetime,
-                        "matches": matches_data,
-                    }
-                    rounds_data.append(round_info)
-
-            data = {
-                "name": self.name,
-                "start_date": self.start_date,
-                "end_date": self.end_date,
-                "players": players_data,
-                "number_of_rounds": self.number_of_rounds,
-                "current_round_number": self.current_round_number,
-                "rounds": rounds_data,
-                "description": self.description,
-                "db_filepath": self.db_filepath,
-            }
-            json.dump(data, json_file, indent=4, ensure_ascii=False)
+            json.dump(self.transform_to_dict(), json_file, indent=4, ensure_ascii=False)

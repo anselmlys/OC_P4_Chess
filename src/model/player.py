@@ -11,6 +11,14 @@ class Player:
     date_of_birth: date
     national_chess_id: str
 
+    def transform_to_dict(self):
+        return {
+            "last_name": self.last_name,
+            "first_name": self.first_name,
+            "date_of_birth": self.date_of_birth,
+            "national_chess_id": self.national_chess_id,
+        }
+
     def save_new_player_information(self, filepath):
         '''Save the player data in the json file storing player information'''
         players_file = Path(filepath)
@@ -30,9 +38,11 @@ class Player:
 
 class InGamePlayer:
     def __init__(self, player: Player):
-        self.player= player
+        self.player = player
         self.score = 0
-
-    def __repr__(self):
-        return (f"{self.player['national_chess_id']}-"
-                f"{self.player['last_name']} {self.player['first_name']}")
+    
+    def transform_to_dict(self):
+        return {
+            "player": self.player.transform_to_dict(),
+            "score": self.score,
+        }
