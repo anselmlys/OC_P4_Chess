@@ -1,0 +1,2 @@
+class TournamentSelectorView:
+    pass

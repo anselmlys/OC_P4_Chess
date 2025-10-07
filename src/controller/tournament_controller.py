@@ -1,5 +1,7 @@
 from src.constants import PLAYER_DB_FILEPATH
 from src.view.tournament.creation_view import TournamentCreationView
+from src.view.tournament.selector_view import TournamentSelectorView
+from src.view.tournament.running_view import TournamentRunningView
 from src.model.tournament import Tournament
 
 
@@ -33,3 +35,8 @@ class TournamentController:
             print(("Attention : le nombre de joueur est impair!\n"
                    "Veuillez ajouter un nouveau joueur avant de continuer.\n"))
             
+    def select_tournament(self):
+        pass
+    
+    def run_tournament(self):
+        pass
