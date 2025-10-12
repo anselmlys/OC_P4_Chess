@@ -12,7 +12,7 @@ class TournamentRunningView:
             return choice
         else:
             print("\nAttention : commande inconnue.\n")
-            self.tournament_start()
+            return self.tournament_start()
 
     def ongoing_tournament(self):
         print((f"\n- Cloturer un match : <match>\n"
@@ -24,14 +24,14 @@ class TournamentRunningView:
             return choice
         else:
             print("\nAttention : commande inconnue.\n")
-            self.ongoing_tournament()
+            return self.ongoing_tournament()
     
     def prompt_match_selection(self, number_of_matches):
         match_number = input("Veuillez entrer le numéro du match à modifier : ")
         if (not INTEGER_FORMAT.match(match_number) or
             int(match_number) > number_of_matches):
             print("Attention : Veuillez entrer le numéro d'un match ! ")
-            self.prompt_match_selection(number_of_matches)
+            return self.prompt_match_selection(number_of_matches)
         else:
             return match_number
 
@@ -60,7 +60,7 @@ class TournamentRunningView:
         winner = input("Qui a gagné ? <1> / <2> / <match nul>")
         if not winner in potential_winner:
             print("\nAttention : Veuillez entrer une commande valide !\n")
-            self.prompt_match_winner(tournament, round_index, match_index)
+            return self.prompt_match_winner(tournament, round_index, match_index)
         else:
             return winner
         

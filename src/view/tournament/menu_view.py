@@ -7,5 +7,11 @@ class TournamentMenuView:
                "- Retourner au menu principal : <retour>\n"))
                
         message_input = ("Veuillez entrez une commande: ")
+        options = ["creer", "continuer", "retour"]
         choice = input(message_input)
-        return choice 
+        if choice in options:
+            return choice
+        else:
+            print(("\nAttention : seules les commandes "
+                   "listées sont disponibles !\n"))
+            return self.prompt_menu_choices()

@@ -18,7 +18,7 @@ class Match:
             "player1": self.player1.transform_to_dict(),
             "player2": self.player2.transform_to_dict(),
             "finished": self.finished,
-            "winner": self.finished,
+            "winner": self.winner,
         }
     
     @classmethod

@@ -1,6 +1,5 @@
 import json
 import random
-from functools import cached_property
 from itertools import groupby, combinations
 from dataclasses import dataclass, field
 from datetime import date
@@ -32,12 +31,13 @@ class Tournament:
         previous_pairs = []
         for round in self.rounds:
             for a, b in round.pair_of_players:
-                previous_pairs.append(set([a, b]))
+                previous_pairs.append(set([a.player.national_chess_id, 
+                                           b.player.national_chess_id]))
         return previous_pairs
 
     def transform_to_dict(self):
         unique_pairs_left = [
-            [a.transform_to_dict(), b.transform_to_dict()] for a, b in self.unique_pairs_left
+            [a, b] for a, b in self.unique_pairs_left
         ]
 
         return {
@@ -63,9 +63,7 @@ class Tournament:
             Round.transform_from_dict(round) for round in json_data["rounds"]
         ]
         unique_pairs_left = [
-            (InGamePlayer.transform_from_dict(a),
-             InGamePlayer.transform_from_dict(b)) 
-             for a, b in json_data["unique_pairs_left"]
+            set([a, b]) for a, b in json_data["unique_pairs_left"]
         ]
 
         return cls(
@@ -98,7 +96,8 @@ class Tournament:
         '''Get all possible unique pairs of players'''
         unique_pairs_in_tuple = combinations(self.players, 2)
         for a, b in unique_pairs_in_tuple:
-            self.unique_pairs_left.append(set([a, b]))
+            self.unique_pairs_left.append(set([a.player.national_chess_id, 
+                                               b.player.national_chess_id]))
     
     def create_new_round(self, pair_of_players):
         '''Create a new round in the tournament.'''
@@ -136,14 +135,16 @@ class Tournament:
             n = 0
             player_to_pair = shuffled_players.pop(n)
             player_to_pair_with = shuffled_players[n]
-            pair = set({player_to_pair, player_to_pair_with})
+            pair = set({player_to_pair.player.national_chess_id, 
+                        player_to_pair_with.player.national_chess_id})
 
             #Change second player if the pair already played together
             try:
                 while pair in self.previous_pairs:
                     n += 1
                     player_to_pair_with = shuffled_players[n]
-                    pair = set({player_to_pair, player_to_pair_with})
+                    pair = set({player_to_pair.national_chess_id, 
+                                player_to_pair_with.national_chess_id})
 
             #Keep original pair if no unique pairs were found
             except:
@@ -156,33 +157,6 @@ class Tournament:
                 pair_of_players.append(pair)
 
         return pair_of_players
-        
-    def continue_tournament(self):
-        #Check if there are remaining rounds to play or not
-        if self.current_round_number < self.number_of_rounds:
-            #Check if all matches are done in current round
-            if all(round.finished for round in self.rounds):
-                #Change current round number
-                self.current_round_number += 1
-
-                #Remove pairs who played together from unique pairs list
-                for previous_pair in self.previous_pairs:
-                    if previous_pair in self.unique_pairs_left:
-                        self.unique_pairs_left.remove(previous_pair)
-
-                #Check if there are still unique pairs available or not
-                if self.unique_pairs_left:
-                    pair_of_players = self.create_unique_pairs()
-                else:
-                    pair_of_players = self.create_random_pairs()
-
-                self.create_new_round(pair_of_players)
-            else:
-                #A déplacer dans "view"
-                print("Le tour précédent n'est pas terminé!")
-        else:
-            #A déplacer dans "view"
-            print("Le tournoi est terminé !")
 
     def create_json_file(self) -> str:
         '''Create the file that will store the tournament data'''

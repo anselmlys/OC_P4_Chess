@@ -50,7 +50,7 @@ class TournamentController:
         tournament_file = Path(filepath)
         if not tournament_file.is_file():
             print("\nAttention : nom de tournoi non valide.\n")
-            self.select_tournament()
+            return self.select_tournament()
         else:
             try:
                 tournament = Tournament.get_tournament_information(filepath)
@@ -62,18 +62,24 @@ class TournamentController:
         choice = self.running_view.tournament_start()
         match choice:
             case "commencer":
+                tournament.get_unique_pairs()
                 pair_of_players = tournament.create_random_pairs()
                 tournament.create_new_round(pair_of_players)
                 round_index = tournament.current_round_number - 1
                 tournament.rounds[round_index].create_matches()
-                self.run_tournament(tournament)
+                try:
+                    tournament.save_tournament_information()
+                    self.run_tournament(tournament)
+                except:
+                    print("\nErreur : sauvegarde du tournoi impossible.\n")
+
             case "revenir":
                 return
             
     def run_tournament(self, tournament: Tournament):
         round_index = tournament.current_round_number - 1
         #Check if tournament is already over or not
-        if (tournament.number_of_rounds == tournament.current_round_number and
+        if (int(tournament.number_of_rounds) == int(tournament.current_round_number) and
               tournament.rounds[round_index].finished):
             self.running_view.tournament_over()
         else:
@@ -88,7 +94,11 @@ class TournamentController:
                                                                    round_index, 
                                                                    match_index)
                     tournament.rounds[round_index].matches[match_index].end_match(winner)
-                    self.run_tournament(tournament)
+                    try:
+                        tournament.save_tournament_information()
+                        self.run_tournament(tournament)
+                    except:
+                        print("\nErreur : sauvegarde du tournoi impossible.\n")
                 case "tour":
                     #Check that the current round is over
                     if tournament.rounds[round_index].finished:
@@ -106,10 +116,13 @@ class TournamentController:
                         tournament.create_new_round(pair_of_players)
                         round_index = tournament.current_round_number - 1
                         tournament.rounds[round_index].create_matches()
-                        self.run_tournament(tournament)
+                        try:
+                            tournament.save_tournament_information()
+                            self.run_tournament(tournament)
+                        except:
+                            print("\nErreur : sauvegarde du tournoi impossible.\n")
                     else:
                         print("\nLe tour actuel n'est pas terminé ! \n")
                         self.run_tournament(tournament)
-
                 case "retour":
                     pass

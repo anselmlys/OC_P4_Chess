@@ -25,10 +25,6 @@ class MenuController:
                 self.tournament_menu_user_choice()
             case "fermer":
                 exit()
-            case _:
-                print(("\nAttention : seules les commandes "
-                      "listées sont disponibles !\n"))
-                self.main_menu_user_choice()
 
     def player_menu_user_choice(self):
         choice = self.player_menu_view.prompt_menu_choices()
@@ -38,13 +34,9 @@ class MenuController:
                 self.player_menu_user_choice()
             case "liste":
                 #Ajouter la liste des joueurs
-                self.main_menu_user_choice()
+                pass
             case "retour":
                 self.main_menu_user_choice()
-            case _:
-                print(("\nAttention : seules les commandes "
-                      "listées sont disponibles !\n"))
-                self.tournament_menu_user_choice()
 
     def tournament_menu_user_choice(self):
         choice = self.tournament_menu_view.prompt_menu_choices()
@@ -57,14 +49,9 @@ class MenuController:
                 #Check if tournament has already started or not
                 if tournament.current_round_number == 0:
                     self.tournament_controller.start_tournament(tournament)
-                    self.main_menu_user_choice()
                 else:
                     self.tournament_controller.run_tournament(tournament)
-                    self.main_menu_user_choice()
             case "retour":
-                self.main_menu_user_choice()
-            case _:
-                print(("\nAttention : seules les commandes "
-                      "listées sont disponibles !\n"))
-                self.tournament_menu_user_choice()
+                pass
+        self.main_menu_user_choice()
 
