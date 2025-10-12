@@ -1,4 +1,5 @@
 from os import listdir
+from pathlib import Path
 
 from src.constants import PLAYER_DB_FILEPATH, TOURNAMENT_DB_FOLDER
 from src.view.tournament.creation_view import TournamentCreationView
@@ -46,8 +47,16 @@ class TournamentController:
         choice = self.selector_view.prompt_tournament_to_select(tournament_files)
         filename = ''.join(e for e in choice if e.isalnum())
         filepath = f"{TOURNAMENT_DB_FOLDER}/{filename}.json"
-        tournament = Tournament.get_tournament_information(filepath)
-        return tournament
+        tournament_file = Path(filepath)
+        if not tournament_file.is_file():
+            print("\nAttention : nom de tournoi non valide.\n")
+            self.select_tournament()
+        else:
+            try:
+                tournament = Tournament.get_tournament_information(filepath)
+                return tournament
+            except:
+                print("\nErreur : impossible d'accéder au fichier.\n")
     
     def start_tournament(self, tournament: Tournament):
         choice = self.running_view.tournament_start()

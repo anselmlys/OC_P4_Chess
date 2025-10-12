@@ -189,9 +189,9 @@ class Tournament:
         filename = ''.join(e for e in self.name if e.isalnum())
         filepath = f"{TOURNAMENT_DB_FOLDER}/{filename}.json"
         tournament_file = Path(filepath)
-        n = 1
+        n = 2
         while tournament_file.is_file():
-            filepath = f"{TOURNAMENT_DB_FOLDER}/{filename}({n}).json"
+            filepath = f"{TOURNAMENT_DB_FOLDER}/{filename}{n}.json"
             tournament_file = Path(filepath)
             n += 1
         with open(filepath, 'w', encoding='utf-8') as json_file:
