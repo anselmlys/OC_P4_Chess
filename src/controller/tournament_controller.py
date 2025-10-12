@@ -1,4 +1,4 @@
-import json
+from os import listdir
 
 from src.constants import PLAYER_DB_FILEPATH, TOURNAMENT_DB_FOLDER
 from src.view.tournament.creation_view import TournamentCreationView
@@ -9,9 +9,11 @@ from src.model.tournament import Tournament
 
 class TournamentController:
     def __init__(self, creation_view: TournamentCreationView,
-                 selector_view: TournamentSelectorView):
+                 selector_view: TournamentSelectorView,
+                 running_view: TournamentRunningView):
         self.creation_view = creation_view
         self.selector_view = selector_view
+        self.running_view = running_view
 
     def create_tournament(self):
         tournament_name = self.creation_view.prompt_tournament_name()
@@ -39,12 +41,19 @@ class TournamentController:
             print(("Attention : le nombre de joueur est impair!\n"
                    "Veuillez ajouter un nouveau joueur avant de continuer.\n"))
             
-    def select_tournament(self, choice):
-        choice = self.selector_view.prompt_tournament_to_select()
+    def select_tournament(self):
+        tournament_files = [f.removesuffix('.json') for f in listdir(TOURNAMENT_DB_FOLDER)]
+        choice = self.selector_view.prompt_tournament_to_select(tournament_files)
         filename = ''.join(e for e in choice if e.isalnum())
         filepath = f"{TOURNAMENT_DB_FOLDER}/{filename}.json"
         tournament = Tournament.get_tournament_information(filepath)
         return tournament
             
-    def run_tournament(self, tournament):
-        pass
+    def run_tournament(self):
+        tournament = self.select_tournament()
+        choice = self.running_view.tournament_status(tournament)
+        match choice:
+            case "continuer":
+                pass
+            case "revenir":
+                pass

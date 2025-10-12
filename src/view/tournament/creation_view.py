@@ -1,9 +1,9 @@
-from src.constants import NO_EMPTY_STRING_FORMAT, DATE_FORMAT, INTEGER_FORMAT
+from src.constants import NO_EMPTY_STRING_FORMAT, DATE_FORMAT, INTEGER_FORMAT, TOURNAMENT_NAME_FORMAT
 
 class TournamentCreationView:
     def prompt_tournament_name(self):
         tournament_name = input("\nVeuillez entrer le nom du tournoi : ")
-        if not NO_EMPTY_STRING_FORMAT.match(tournament_name):
+        if not TOURNAMENT_NAME_FORMAT.match(tournament_name):
             print("Attention : Ce champs ne doit pas être vide ! ")
             self.prompt_tournament_name()
         else:

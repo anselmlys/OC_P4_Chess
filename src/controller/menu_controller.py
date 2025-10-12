@@ -52,8 +52,8 @@ class MenuController:
             case "creer":
                 self.tournament_controller.create_tournament()
                 self.tournament_menu_user_choice()
-            case "gerer":
-                #Ajouter la gestion de tournoi
+            case "continuer":
+                self.tournament_controller.run_tournament()
                 self.main_menu_user_choice()
             case "retour":
                 self.main_menu_user_choice()
