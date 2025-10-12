@@ -33,8 +33,8 @@ class MenuController:
                 self.player_controller.get_player_information()
                 self.player_menu_user_choice()
             case "liste":
-                #Ajouter la liste des joueurs
-                pass
+                self.player_controller.show_players_list()
+                self.player_menu_user_choice()
             case "retour":
                 self.main_menu_user_choice()
 

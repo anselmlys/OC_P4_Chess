@@ -11,6 +11,11 @@ class Player:
     date_of_birth: date
     national_chess_id: str
 
+    def __str__(self):
+        return (f"{self.national_chess_id} - "
+                f"{self.last_name.title()} {self.first_name.title()} "
+                f"({self.date_of_birth})")
+
     def transform_to_dict(self):
         return {
             "last_name": self.last_name,
@@ -43,6 +48,15 @@ class Player:
                 data = {"players": []}
                 data["players"].append(asdict(self))
                 json.dump(data, json_file, indent=4, ensure_ascii=False)
+
+    def get_players_data(json_file: str) -> list:
+        with open(json_file, "r", encoding="utf-8") as players_file:
+            players = []
+            players_data = json.load(players_file)
+            for player_data in players_data["players"]:
+                player = Player.transform_from_dict(player_data)
+                players.append(player)
+            return players
 
 
 class InGamePlayer:
