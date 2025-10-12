@@ -1,6 +1,6 @@
 class TournamentMenuView:
     def prompt_menu_choices(self):
-        print(("Que souhaitez-vous faire ? (les commandes disponibles "
+        print(("\nQue souhaitez-vous faire ? (les commandes disponibles "
                "sont représentées entre <>) : \n"
                "- Créer un nouveau tournoi : <creer>\n"
                "- Lancer/Continuer un tournoi : <continuer>\n"

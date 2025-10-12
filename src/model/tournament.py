@@ -117,7 +117,7 @@ class Tournament:
             
         return pair_of_players
     
-    def create_unique_pairs(self, previous_pairs):
+    def create_unique_pairs(self):
         '''Pair together players who have not played against eachother'''
         #Sort all players based on their scores
         sorted_players = self.players.copy()
@@ -140,7 +140,7 @@ class Tournament:
 
             #Change second player if the pair already played together
             try:
-                while pair in previous_pairs:
+                while pair in self.previous_pairs:
                     n += 1
                     player_to_pair_with = shuffled_players[n]
                     pair = set({player_to_pair, player_to_pair_with})
@@ -172,7 +172,7 @@ class Tournament:
 
                 #Check if there are still unique pairs available or not
                 if self.unique_pairs_left:
-                    pair_of_players = self.create_unique_pairs(self.previous_pairs)
+                    pair_of_players = self.create_unique_pairs()
                 else:
                     pair_of_players = self.create_random_pairs()
 

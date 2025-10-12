@@ -53,8 +53,14 @@ class MenuController:
                 self.tournament_controller.create_tournament()
                 self.tournament_menu_user_choice()
             case "continuer":
-                self.tournament_controller.run_tournament()
-                self.main_menu_user_choice()
+                tournament = self.tournament_controller.select_tournament()
+                #Check if tournament has already started or not
+                if tournament.current_round_number == 0:
+                    self.tournament_controller.start_tournament(tournament)
+                    self.main_menu_user_choice()
+                else:
+                    self.tournament_controller.run_tournament(tournament)
+                    self.main_menu_user_choice()
             case "retour":
                 self.main_menu_user_choice()
             case _:

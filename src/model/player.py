@@ -49,6 +49,11 @@ class InGamePlayer:
     def __init__(self, player: Player, score: int = 0):
         self.player = player
         self.score = score
+
+    def __str__(self):
+        return (f"{self.player.national_chess_id}-"
+                f"{self.player.last_name} "
+                f"{self.player.first_name}")
     
     def transform_to_dict(self):
         return {

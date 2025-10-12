@@ -44,13 +44,13 @@ class Match:
     def end_match(self, winner):
         '''Add the points to the score of the winner and set the match to finished'''
         match winner:
-            case "player1":
+            case "1":
                 self.player1.score += 1
                 self.winner = winner
-            case "player2":
+            case "2":
                 self.player2.score += 1
                 self.winner = winner
-            case "draw":
+            case "match nul":
                 self.player1.score += 0.5
                 self.player2.score += 0.5
                 self.winner = winner
