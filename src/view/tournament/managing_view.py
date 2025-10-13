@@ -1,7 +1,7 @@
 from src.constants import INTEGER_FORMAT
 
 
-class TournamentRunningView:
+class TournamentManagingView:
     def tournament_start(self):
         print((f"\nCe tournoi n'a pas encore commencé.\n"
                f"\nSouhaitez vous le <commencer> ou <revenir> au "
@@ -17,8 +17,10 @@ class TournamentRunningView:
     def ongoing_tournament(self):
         print((f"\n- Cloturer un match : <match>\n"
                f"- Créer le prochain tour : <tour>\n"
+               f"- Voir liste des joueurs et de leurs scores : <joueur>\n"
+               f"- Voir les informations du tournoi : <info>\n"
                f"- Revenir au menu principal : <retour>\n"))
-        options = ["match", "tour", "retour"]
+        options = ["match", "tour", "joueur", "info", "retour"]
         choice = input("Veuillez entrez une commande: ")
         if choice in options:
             return choice
@@ -40,6 +42,7 @@ class TournamentRunningView:
 
     def current_status(self, tournament, round_index):
         print((f"\nTournoi : {tournament.name.title()}\n"
+               f"Date : {tournament.start_date} - {tournament.end_date}\n"
                f"Nombre de tour : {tournament.number_of_rounds}\n"
                f"Tour actuel : {tournament.current_round_number}\n"
                f"\nVoici les matchs de ce tour : "))

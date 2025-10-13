@@ -4,19 +4,20 @@ from pathlib import Path
 from src.constants import PLAYER_DB_FILEPATH, TOURNAMENT_DB_FOLDER
 from src.view.tournament.creation_view import TournamentCreationView
 from src.view.tournament.selector_view import TournamentSelectorView
-from src.view.tournament.running_view import TournamentRunningView
+from src.view.tournament.managing_view import TournamentManagingView
 from src.view.tournament.report_view import TournamentReportView
 from src.model.tournament import Tournament
+from src.model.player import Player
 
 
 class TournamentController:
     def __init__(self, creation_view: TournamentCreationView,
                  selector_view: TournamentSelectorView,
-                 running_view: TournamentRunningView,
+                 managing_view: TournamentManagingView,
                  report_view: TournamentReportView):
         self.creation_view = creation_view
         self.selector_view = selector_view
-        self.running_view = running_view
+        self.managing_view = managing_view
         self.report_view = report_view
 
     def create_tournament(self):
@@ -64,14 +65,17 @@ class TournamentController:
     def list_tournaments(self):
         tournaments = []
         tournament_files = [f for f in listdir(TOURNAMENT_DB_FOLDER)]
-        for file in tournament_files:
-            filepath = f"{TOURNAMENT_DB_FOLDER}/{file}"
-            tournament = Tournament.get_tournament_information(filepath)
-            tournaments.append(tournament)
-        self.report_view.list_of_tournaments(tournaments)
+        try:
+            for file in tournament_files:
+                filepath = f"{TOURNAMENT_DB_FOLDER}/{file}"
+                tournament = Tournament.get_tournament_information(filepath)
+                tournaments.append(tournament)
+            self.report_view.list_of_tournaments(tournaments)
+        except:
+            print("\nErreur : impossible d'accéder au fichier.\n")
     
     def start_tournament(self, tournament: Tournament):
-        choice = self.running_view.tournament_start()
+        choice = self.managing_view.tournament_start()
         match choice:
             case "commencer":
                 tournament.get_unique_pairs()
@@ -81,34 +85,34 @@ class TournamentController:
                 tournament.rounds[round_index].create_matches()
                 try:
                     tournament.save_tournament_information()
-                    self.run_tournament(tournament)
+                    self.manage_tournament(tournament)
                 except:
                     print("\nErreur : sauvegarde du tournoi impossible.\n")
 
             case "revenir":
                 return
             
-    def run_tournament(self, tournament: Tournament):
+    def manage_tournament(self, tournament: Tournament):
         round_index = tournament.current_round_number - 1
         #Check if tournament is already over or not
         if (int(tournament.number_of_rounds) == int(tournament.current_round_number) and
               tournament.rounds[round_index].finished):
-            self.running_view.tournament_over()
+            self.managing_view.tournament_over()
         else:
-            self.running_view.current_status(tournament, round_index)
-            choice = self.running_view.ongoing_tournament()
+            self.managing_view.current_status(tournament, round_index)
+            choice = self.managing_view.ongoing_tournament()
             match choice:
                 case "match":
                     number_of_matches = len(tournament.rounds[round_index].matches)
-                    match_number = int(self.running_view.prompt_match_selection(number_of_matches))
+                    match_number = int(self.managing_view.prompt_match_selection(number_of_matches))
                     match_index = match_number - 1
-                    winner = self.running_view.prompt_match_winner(tournament, 
+                    winner = self.managing_view.prompt_match_winner(tournament, 
                                                                    round_index, 
                                                                    match_index)
                     tournament.rounds[round_index].matches[match_index].end_match(winner)
                     try:
                         tournament.save_tournament_information()
-                        self.run_tournament(tournament)
+                        self.manage_tournament(tournament)
                     except:
                         print("\nErreur : sauvegarde du tournoi impossible.\n")
                 case "tour":
@@ -130,11 +134,18 @@ class TournamentController:
                         tournament.rounds[round_index].create_matches()
                         try:
                             tournament.save_tournament_information()
-                            self.run_tournament(tournament)
+                            self.manage_tournament(tournament)
                         except:
                             print("\nErreur : sauvegarde du tournoi impossible.\n")
                     else:
                         print("\nLe tour actuel n'est pas terminé ! \n")
-                        self.run_tournament(tournament)
+                        self.manage_tournament(tournament)
+                case "joueur":
+                    players = sorted(tournament.players, 
+                                     key=lambda player: player.player.last_name)
+                    self.report_view.list_of_players(players)
+                    self.manage_tournament(tournament)
+                case "info":
+                    pass
                 case "retour":
                     pass

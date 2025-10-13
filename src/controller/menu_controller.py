@@ -44,13 +44,13 @@ class MenuController:
             case "creer":
                 self.tournament_controller.create_tournament()
                 self.tournament_menu_user_choice()
-            case "continuer":
+            case "gerer":
                 tournament = self.tournament_controller.select_tournament()
                 #Check if tournament has already started or not
                 if tournament.current_round_number == 0:
                     self.tournament_controller.start_tournament(tournament)
                 else:
-                    self.tournament_controller.run_tournament(tournament)
+                    self.tournament_controller.manage_tournament(tournament)
             case "liste":
                 self.tournament_controller.list_tournaments()
                 self.tournament_menu_user_choice()
