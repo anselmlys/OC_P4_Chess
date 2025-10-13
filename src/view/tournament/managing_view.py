@@ -27,6 +27,21 @@ class TournamentManagingView:
         else:
             print("\nAttention : commande inconnue.\n")
             return self.ongoing_tournament()
+        
+    def tournament_over(self, tournament):
+        print((f"\nLe tournoi {tournament.name.title()} est terminé !\n"
+               f"Date de début : {tournament.start_date}\n"
+               f"Date de fin : {tournament.end_date}"))
+        print((f"\n- Voir liste des joueurs et de leurs scores : <joueur>\n"
+               f"- Voir les informations du tournoi : <info>\n"
+               f"- Revenir au menu principal : <retour>\n"))
+        options = ["joueur", "info", "retour"]
+        choice = input("Veuillez entrez une commande: ")
+        if choice in options:
+            return choice
+        else:
+            print("\nAttention : commande inconnue.\n")
+            return self.tournament_over(tournament)   
     
     def prompt_match_selection(self, number_of_matches):
         match_number = input("Veuillez entrer le numéro du match à modifier : ")
@@ -36,9 +51,18 @@ class TournamentManagingView:
             return self.prompt_match_selection(number_of_matches)
         else:
             return match_number
-
-    def tournament_over(self):
-        print("\nLe tournoi est terminé !\n")
+        
+    def prompt_match_winner(self, tournament, round_index, match_index):
+        match = tournament.rounds[round_index].matches[match_index]
+        print((f"\nJoueur 1 : {match.player1}\n"
+               f"Joueur 2 : {match.player2}\n"))
+        potential_winner = ["1", "2", "match nul"]
+        winner = input("Qui a gagné ? <1> / <2> / <match nul>")
+        if not winner in potential_winner:
+            print("\nAttention : Veuillez entrer une commande valide !\n")
+            return self.prompt_match_winner(tournament, round_index, match_index)
+        else:
+            return winner
 
     def current_status(self, tournament, round_index):
         print((f"\nTournoi : {tournament.name.title()}\n"
@@ -55,15 +79,5 @@ class TournamentManagingView:
                    f"Gagnant : {match.winner}"))
             match_number +=1
 
-    def prompt_match_winner(self, tournament, round_index, match_index):
-        match = tournament.rounds[round_index].matches[match_index]
-        print((f"\nJoueur 1 : {match.player1}\n"
-               f"Joueur 2 : {match.player2}\n"))
-        potential_winner = ["1", "2", "match nul"]
-        winner = input("Qui a gagné ? <1> / <2> / <match nul>")
-        if not winner in potential_winner:
-            print("\nAttention : Veuillez entrer une commande valide !\n")
-            return self.prompt_match_winner(tournament, round_index, match_index)
-        else:
-            return winner
+
         

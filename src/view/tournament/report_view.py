@@ -13,9 +13,9 @@ class TournamentReportView:
                    f"Score : {player.score}"))
 
     def tournament_info(self, tournament):
-        print("\nVoici l'ensemble des tours et de leurs matchs : \n")   
+        print("\nVoici l'ensemble des tours et de leurs matchs :")   
         for round in tournament.rounds:
-            print((f"\nNom : {round.name} :\n"
+            print((f"\nNom : {round.name}\n"
                    f"Date de début : {round.start_datetime}\n"
                    f"Date de fin : {round.end_datetime}"))
             match_number = 1

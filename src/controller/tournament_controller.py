@@ -92,61 +92,67 @@ class TournamentController:
             case "revenir":
                 return
             
+    def end_match(self, tournament: Tournament, round_index: int):
+        number_of_matches = len(tournament.rounds[round_index].matches)
+        match_number = int(self.managing_view.prompt_match_selection(number_of_matches))
+        match_index = match_number - 1
+        winner = self.managing_view.prompt_match_winner(tournament, 
+                                                        round_index, 
+                                                        match_index)
+        tournament.rounds[round_index].matches[match_index].end_match(winner)
+        try:
+            tournament.save_tournament_information()
+            self.manage_tournament(tournament)
+        except:
+            print("\nErreur : sauvegarde du tournoi impossible.\n")
+
+    def create_new_round(self, tournament: Tournament, round_index: int):
+         #Check that the current round is over
+        if tournament.rounds[round_index].finished:
+            #Remove pairs who played together from unique pairs list
+            for previous_pair in tournament.previous_pairs:
+                if previous_pair in tournament.unique_pairs_left:
+                    tournament.unique_pairs_left.remove(previous_pair)
+
+            #Check if there are still unique pairs available or not
+            if tournament.unique_pairs_left:
+                pair_of_players = tournament.create_unique_pairs()
+            else:
+                pair_of_players = tournament.create_random_pairs()
+
+            tournament.create_new_round(pair_of_players)
+            round_index = tournament.current_round_number - 1
+            tournament.rounds[round_index].create_matches()
+            try:
+                tournament.save_tournament_information()
+                self.manage_tournament(tournament)
+            except:
+                print("\nErreur : sauvegarde du tournoi impossible.\n")
+        else:
+            print("\nLe tour actuel n'est pas terminé ! \n")
+            self.manage_tournament(tournament)
+
     def manage_tournament(self, tournament: Tournament):
         round_index = tournament.current_round_number - 1
         #Check if tournament is already over or not
         if (int(tournament.number_of_rounds) == int(tournament.current_round_number) and
               tournament.rounds[round_index].finished):
-            self.managing_view.tournament_over()
+            choice = self.managing_view.tournament_over(tournament)
         else:
             self.managing_view.current_status(tournament, round_index)
             choice = self.managing_view.ongoing_tournament()
-            match choice:
-                case "match":
-                    number_of_matches = len(tournament.rounds[round_index].matches)
-                    match_number = int(self.managing_view.prompt_match_selection(number_of_matches))
-                    match_index = match_number - 1
-                    winner = self.managing_view.prompt_match_winner(tournament, 
-                                                                   round_index, 
-                                                                   match_index)
-                    tournament.rounds[round_index].matches[match_index].end_match(winner)
-                    try:
-                        tournament.save_tournament_information()
-                        self.manage_tournament(tournament)
-                    except:
-                        print("\nErreur : sauvegarde du tournoi impossible.\n")
-                case "tour":
-                    #Check that the current round is over
-                    if tournament.rounds[round_index].finished:
-                        #Remove pairs who played together from unique pairs list
-                        for previous_pair in tournament.previous_pairs:
-                            if previous_pair in tournament.unique_pairs_left:
-                                tournament.unique_pairs_left.remove(previous_pair)
-
-                        #Check if there are still unique pairs available or not
-                        if tournament.unique_pairs_left:
-                            pair_of_players = tournament.create_unique_pairs()
-                        else:
-                            pair_of_players = tournament.create_random_pairs()
-
-                        tournament.create_new_round(pair_of_players)
-                        round_index = tournament.current_round_number - 1
-                        tournament.rounds[round_index].create_matches()
-                        try:
-                            tournament.save_tournament_information()
-                            self.manage_tournament(tournament)
-                        except:
-                            print("\nErreur : sauvegarde du tournoi impossible.\n")
-                    else:
-                        print("\nLe tour actuel n'est pas terminé ! \n")
-                        self.manage_tournament(tournament)
-                case "joueur":
-                    players = sorted(tournament.players, 
-                                     key=lambda player: player.player.last_name)
-                    self.report_view.list_of_players(players)
-                    self.manage_tournament(tournament)
-                case "info":
-                    self.report_view.tournament_info(tournament)
-                    self.manage_tournament(tournament)
-                case "retour":
-                    pass
+        match choice:
+            case "match":
+                self.end_match(tournament, round_index)
+            case "tour":
+                self.create_new_round(tournament, round_index)
+            case "joueur":
+                players = sorted(tournament.players, 
+                                    key=lambda player: player.player.last_name)
+                self.report_view.list_of_players(players)
+                self.manage_tournament(tournament)
+            case "info":
+                self.report_view.tournament_info(tournament)
+                self.manage_tournament(tournament)
+            case "retour":
+                pass
