@@ -51,6 +51,9 @@ class MenuController:
                     self.tournament_controller.start_tournament(tournament)
                 else:
                     self.tournament_controller.run_tournament(tournament)
+            case "liste":
+                self.tournament_controller.list_tournaments()
+                self.tournament_menu_user_choice()
             case "retour":
                 pass
         self.main_menu_user_choice()

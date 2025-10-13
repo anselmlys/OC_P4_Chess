@@ -3,11 +3,12 @@ class TournamentMenuView:
         print(("\nQue souhaitez-vous faire ? (les commandes disponibles "
                "sont représentées entre <>) : \n"
                "- Créer un nouveau tournoi : <creer>\n"
-               "- Lancer/Continuer un tournoi : <continuer>\n"
+               "- Lancer/Continuer un tournoi : <continuer>\n"                
+               "- Voir liste des tournois : <liste>\n"
                "- Retourner au menu principal : <retour>\n"))
                
         message_input = ("Veuillez entrez une commande: ")
-        options = ["creer", "continuer", "retour"]
+        options = ["creer", "continuer", "liste", "retour"]
         choice = input(message_input)
         if choice in options:
             return choice

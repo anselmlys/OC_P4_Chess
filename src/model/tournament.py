@@ -35,6 +35,10 @@ class Tournament:
                                            b.player.national_chess_id]))
         return previous_pairs
 
+    def __str__(self):
+        return (f"{self.name.title()} - {self.place.title()} "
+                f"({self.start_date} - {self.end_date})")
+
     def transform_to_dict(self):
         unique_pairs_left = [
             [a, b] for a, b in self.unique_pairs_left

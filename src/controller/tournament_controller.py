@@ -5,16 +5,19 @@ from src.constants import PLAYER_DB_FILEPATH, TOURNAMENT_DB_FOLDER
 from src.view.tournament.creation_view import TournamentCreationView
 from src.view.tournament.selector_view import TournamentSelectorView
 from src.view.tournament.running_view import TournamentRunningView
+from src.view.tournament.report_view import TournamentReportView
 from src.model.tournament import Tournament
 
 
 class TournamentController:
     def __init__(self, creation_view: TournamentCreationView,
                  selector_view: TournamentSelectorView,
-                 running_view: TournamentRunningView):
+                 running_view: TournamentRunningView,
+                 report_view: TournamentReportView):
         self.creation_view = creation_view
         self.selector_view = selector_view
         self.running_view = running_view
+        self.report_view = report_view
 
     def create_tournament(self):
         tournament_name = self.creation_view.prompt_tournament_name()
@@ -57,6 +60,15 @@ class TournamentController:
                 return tournament
             except:
                 print("\nErreur : impossible d'accéder au fichier.\n")
+
+    def list_tournaments(self):
+        tournaments = []
+        tournament_files = [f for f in listdir(TOURNAMENT_DB_FOLDER)]
+        for file in tournament_files:
+            filepath = f"{TOURNAMENT_DB_FOLDER}/{file}"
+            tournament = Tournament.get_tournament_information(filepath)
+            tournaments.append(tournament)
+        self.report_view.list_of_tournaments(tournaments)
     
     def start_tournament(self, tournament: Tournament):
         choice = self.running_view.tournament_start()

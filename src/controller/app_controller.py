@@ -12,6 +12,7 @@ from src.view.tournament.menu_view import TournamentMenuView
 from src.view.tournament.creation_view import TournamentCreationView
 from src.view.tournament.selector_view import TournamentSelectorView
 from src.view.tournament.running_view import TournamentRunningView
+from src.view.tournament.report_view import TournamentReportView
 
 
 class AppController:
@@ -25,13 +26,15 @@ class AppController:
         tournament_creation_view = TournamentCreationView()
         tournament_selector_view = TournamentSelectorView()
         tournament_running_view = TournamentRunningView()
+        tournament_report_view = TournamentReportView()
 
         #Instantiate controllers
         player_controller = PlayerController(player_register_view,
                                              player_list_view)
         tournament_controller = TournamentController(tournament_creation_view,
                                                      tournament_selector_view,
-                                                     tournament_running_view)
+                                                     tournament_running_view,
+                                                     tournament_report_view)
         menu_controller = MenuController(main_menu_view, player_menu_view,
                                          tournament_menu_view, player_controller,
                                          tournament_controller)
