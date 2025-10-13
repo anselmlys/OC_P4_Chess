@@ -3,6 +3,7 @@ class TournamentReportView:
         print("\nVoici la liste des tournois : ")
         for tournament in tournaments:
             print(tournament)
+        input("\nPress Enter to continue...\n")
 
     def list_of_players(self, players: list):
         print("\nVoici la liste des joueurs du tournoi : ")
@@ -11,6 +12,7 @@ class TournamentReportView:
                    f"{player.player.last_name.title()} "
                    f"{player.player.first_name.title()} - "
                    f"Score : {player.score}"))
+        input("\nPress Enter to continue...\n")
 
     def tournament_info(self, tournament):
         print("\nVoici l'ensemble des tours et de leurs matchs :")   
@@ -22,3 +24,4 @@ class TournamentReportView:
             for match in round.matches:
                 print(f"Match {match_number} : {match}")
                 match_number +=1
+        input("\nPress Enter to continue...\n")

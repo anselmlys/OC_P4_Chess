@@ -22,6 +22,7 @@ class PlayerController:
                                                     player.first_name)
         except:
             print("Une erreur est survenue, le joueur n'a pas été enregistré.")
+            input("\nPress Enter to continue...\n")
 
     def show_players_list(self):
         players = Player.get_players_data(PLAYER_DB_FILEPATH)

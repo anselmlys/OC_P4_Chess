@@ -14,4 +14,5 @@ class PlayerMenuView:
         else:
             print(("\nAttention : seules les commandes "
                     "listées sont disponibles !\n"))
+            input("\nPress Enter to continue...\n")
             return self.prompt_menu_choices()

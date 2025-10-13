@@ -3,3 +3,4 @@ class PlayerListView:
         print("\nVoici la liste des joueurs : ")
         for player in players:
             print(player)
+        input("\nPress Enter to continue...\n")

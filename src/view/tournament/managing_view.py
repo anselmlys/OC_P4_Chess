@@ -12,6 +12,7 @@ class TournamentManagingView:
             return choice
         else:
             print("\nAttention : commande inconnue.\n")
+            input("\nPress Enter to continue...\n")
             return self.tournament_start()
 
     def ongoing_tournament(self):
@@ -26,6 +27,7 @@ class TournamentManagingView:
             return choice
         else:
             print("\nAttention : commande inconnue.\n")
+            input("\nPress Enter to continue...\n")
             return self.ongoing_tournament()
         
     def tournament_over(self, tournament):
@@ -41,6 +43,7 @@ class TournamentManagingView:
             return choice
         else:
             print("\nAttention : commande inconnue.\n")
+            input("\nPress Enter to continue...\n")
             return self.tournament_over(tournament)   
     
     def prompt_match_selection(self, number_of_matches):
@@ -48,6 +51,7 @@ class TournamentManagingView:
         if (not INTEGER_FORMAT.match(match_number) or
             int(match_number) > number_of_matches):
             print("Attention : Veuillez entrer le numéro d'un match ! ")
+            input("\nPress Enter to continue...\n")
             return self.prompt_match_selection(number_of_matches)
         else:
             return match_number
@@ -60,6 +64,7 @@ class TournamentManagingView:
         winner = input("Qui a gagné ? <1> / <2> / <match nul>")
         if not winner in potential_winner:
             print("\nAttention : Veuillez entrer une commande valide !\n")
+            input("\nPress Enter to continue...\n")
             return self.prompt_match_winner(tournament, round_index, match_index)
         else:
             return winner

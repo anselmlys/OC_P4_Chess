@@ -7,7 +7,6 @@ from src.view.tournament.selector_view import TournamentSelectorView
 from src.view.tournament.managing_view import TournamentManagingView
 from src.view.tournament.report_view import TournamentReportView
 from src.model.tournament import Tournament
-from src.model.player import Player
 
 
 class TournamentController:
@@ -40,11 +39,14 @@ class TournamentController:
                 tournament.create_json_file()
                 tournament.save_tournament_information()
                 print("\nLe tournoi a bien été créé !\n")
+                input("\nPress Enter to continue...\n")
             except:
                 print("\nUne erreur est survenue, le tournoi n'a pas été enregistré.\n")
+                input("\nPress Enter to continue...\n")
         else:
             print(("Attention : le nombre de joueur est impair!\n"
                    "Veuillez ajouter un nouveau joueur avant de continuer.\n"))
+            input("\nPress Enter to continue...\n")
             
     def select_tournament(self):
         tournament_files = [f.removesuffix('.json') for f in listdir(TOURNAMENT_DB_FOLDER)]
@@ -54,6 +56,7 @@ class TournamentController:
         tournament_file = Path(filepath)
         if not tournament_file.is_file():
             print("\nAttention : nom de tournoi non valide.\n")
+            input("\nPress Enter to continue...\n")
             return self.select_tournament()
         else:
             try:
@@ -61,6 +64,7 @@ class TournamentController:
                 return tournament
             except:
                 print("\nErreur : impossible d'accéder au fichier.\n")
+                input("\nPress Enter to continue...\n")
 
     def list_tournaments(self):
         tournaments = []
@@ -73,6 +77,7 @@ class TournamentController:
             self.report_view.list_of_tournaments(tournaments)
         except:
             print("\nErreur : impossible d'accéder au fichier.\n")
+            input("\nPress Enter to continue...\n")
     
     def start_tournament(self, tournament: Tournament):
         choice = self.managing_view.tournament_start()
@@ -88,6 +93,7 @@ class TournamentController:
                     self.manage_tournament(tournament)
                 except:
                     print("\nErreur : sauvegarde du tournoi impossible.\n")
+                    input("\nPress Enter to continue...\n")
 
             case "revenir":
                 return
