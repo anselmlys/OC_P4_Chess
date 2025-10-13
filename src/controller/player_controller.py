@@ -20,8 +20,11 @@ class PlayerController:
             player.save_new_player_information(PLAYER_DB_FILEPATH)
             self.register_view.confirm_player_registered(player.last_name,
                                                     player.first_name)
-        except:
-            print("Une erreur est survenue, le joueur n'a pas été enregistré.")
+        except PermissionError:
+            print(f"\nErreur : accès au fichier {PLAYER_DB_FILEPATH} refusé.")
+            input("\nPress Enter to continue...\n")
+        except Exception as e:
+            print(f"\nUne erreur est survenue : {e}")
             input("\nPress Enter to continue...\n")
 
     def show_players_list(self):

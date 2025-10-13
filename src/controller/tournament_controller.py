@@ -40,8 +40,12 @@ class TournamentController:
                 tournament.save_tournament_information()
                 print("\nLe tournoi a bien été créé !\n")
                 input("\nPress Enter to continue...\n")
-            except:
-                print("\nUne erreur est survenue, le tournoi n'a pas été enregistré.\n")
+            except PermissionError:
+                print(("Accès refusé : "
+                       "le tournoi n'a pas été enregistré.\n"))
+                input("\nPress Enter to continue...\n")
+            except Exception as e:
+                print(f"\nUne erreur est survenue : {e}")
                 input("\nPress Enter to continue...\n")
         else:
             print(("Attention : le nombre de joueur est impair!\n"
@@ -62,8 +66,14 @@ class TournamentController:
             try:
                 tournament = Tournament.get_tournament_information(filepath)
                 return tournament
-            except:
-                print("\nErreur : impossible d'accéder au fichier.\n")
+            except FileNotFoundError:
+                print(f"\nErreur : le fichier {filename}.json est introuvable.\n")
+                input("\nPress Enter to continue...\n")
+            except PermissionError:
+                print(f"\nErreur : accès au fichier {filename}.json refusé.")
+                input("\nPress Enter to continue...\n")
+            except Exception as e:
+                print(f"\nUne erreur est survenue : {e}")
                 input("\nPress Enter to continue...\n")
 
     def list_tournaments(self):
@@ -75,8 +85,14 @@ class TournamentController:
                 tournament = Tournament.get_tournament_information(filepath)
                 tournaments.append(tournament)
             self.report_view.list_of_tournaments(tournaments)
-        except:
-            print("\nErreur : impossible d'accéder au fichier.\n")
+        except FileNotFoundError:
+            print(f"\nErreur : le fichier {file} est introuvable.\n")
+            input("\nPress Enter to continue...\n")
+        except PermissionError:
+            print(f"\nErreur : accès au fichier {file} refusé.")
+            input("\nPress Enter to continue...\n")
+        except Exception as e:
+            print(f"\nUne erreur est survenue : {e}")
             input("\nPress Enter to continue...\n")
     
     def start_tournament(self, tournament: Tournament):
@@ -91,8 +107,11 @@ class TournamentController:
                 try:
                     tournament.save_tournament_information()
                     self.manage_tournament(tournament)
-                except:
-                    print("\nErreur : sauvegarde du tournoi impossible.\n")
+                except PermissionError:
+                    print(f"\nErreur : accès au fichier {tournament.db_filepath} refusé.")
+                    input("\nPress Enter to continue...\n")
+                except Exception as e:
+                    print(f"\nUne erreur est survenue : {e}")
                     input("\nPress Enter to continue...\n")
 
             case "revenir":
@@ -109,8 +128,12 @@ class TournamentController:
         try:
             tournament.save_tournament_information()
             self.manage_tournament(tournament)
-        except:
-            print("\nErreur : sauvegarde du tournoi impossible.\n")
+        except PermissionError:
+            print(f"\nErreur : accès au fichier {tournament.db_filepath} refusé.")
+            input("\nPress Enter to continue...\n")
+        except Exception as e:
+            print(f"\nUne erreur est survenue : {e}")
+            input("\nPress Enter to continue...\n")
 
     def create_new_round(self, tournament: Tournament, round_index: int):
          #Check that the current round is over
@@ -132,8 +155,12 @@ class TournamentController:
             try:
                 tournament.save_tournament_information()
                 self.manage_tournament(tournament)
-            except:
-                print("\nErreur : sauvegarde du tournoi impossible.\n")
+            except PermissionError:
+                print(f"\nErreur : accès au fichier {tournament.db_filepath} refusé.")
+                input("\nPress Enter to continue...\n")
+            except Exception as e:
+                print(f"\nUne erreur est survenue : {e}")
+                input("\nPress Enter to continue...\n")
         else:
             print("\nLe tour actuel n'est pas terminé ! \n")
             self.manage_tournament(tournament)
