@@ -186,3 +186,8 @@ class Tournament:
             tournament_data = json.load(tournament_file)
             tournament = Tournament.transform_from_dict(tournament_data)
         return tournament
+    
+    def end_tournament(self):
+        if self.end_date is None:
+                self.end_date = date.today().strftime("%Y-%m-%d")
+                self.save_tournament_information()

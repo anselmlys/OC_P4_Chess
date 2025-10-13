@@ -15,17 +15,13 @@ class Match:
     
     def __str__(self):
         if self.winner == "1":
-            return ((f"{self.player1} - {self.player1.score} (gagnant) // "
-                    f"{self.player2} - {self.player2.score}"))
+            return (f"{self.player1} (gagnant) // {self.player2}")
         elif self.winner == "2":
-            return ((f"{self.player1} - {self.player1.score} // "
-                    f"{self.player2} - {self.player2.score} (gagnant)"))
+            return (f"{self.player1} // {self.player2} (gagnant)")
         elif self.winner == "match nul":
-            return ((f"(Match nul) {self.player1} - {self.player1.score} // "
-                    f"{self.player2} - {self.player2.score}"))
+            return (f"(Match nul) {self.player1} // {self.player2}")
         else:
-            return ((f"(En cours) {self.player1} - {self.player1.score} // "
-                    f"{self.player2} - {self.player2.score}"))
+            return ((f"(En cours) {self.player1} // {self.player2}"))
     
     def transform_to_dict(self):
         return {

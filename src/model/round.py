@@ -9,7 +9,7 @@ from src.model.player import InGamePlayer
 class Round:
     name: str
     pair_of_players: list
-    start_datetime: datetime = datetime.now().strftime("%Y-%m-%d %H:%m")
+    start_datetime: datetime = datetime.now().strftime("%Y-%m-%d %H:%M")
     end_datetime: datetime | None = None
     matches: list = field(default_factory=list)
 
@@ -67,7 +67,7 @@ class Round:
     def _on_match_finished(self, match):
         '''Contains the function that will be called when matches are done'''
         if self.end_datetime is None and self.finished:
-            self.end_datetime = datetime.now().strftime("%Y-%m-%d %H:%m")
+            self.end_datetime = datetime.now().strftime("%Y-%m-%d %H:%M")
 
 
 

@@ -137,6 +137,7 @@ class TournamentController:
         #Check if tournament is already over or not
         if (int(tournament.number_of_rounds) == int(tournament.current_round_number) and
               tournament.rounds[round_index].finished):
+            tournament.end_tournament()
             choice = self.managing_view.tournament_over(tournament)
         else:
             self.managing_view.current_status(tournament, round_index)
