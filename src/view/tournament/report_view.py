@@ -15,7 +15,7 @@ class TournamentReportView:
         input("\nPress Enter to continue...\n")
 
     def tournament_info(self, tournament):
-        print("\nVoici l'ensemble des tours et de leurs matchs :")   
+        print("\nVoici l'ensemble des tours et de leurs matchs :")
         for round in tournament.rounds:
             print((f"\nNom : {round.name}\n"
                    f"Date de début : {round.start_datetime}\n"
@@ -23,5 +23,5 @@ class TournamentReportView:
             match_number = 1
             for match in round.matches:
                 print(f"Match {match_number} : {match}")
-                match_number +=1
+                match_number += 1
         input("\nPress Enter to continue...\n")

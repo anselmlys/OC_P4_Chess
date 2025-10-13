@@ -23,7 +23,7 @@ class Player:
             "date_of_birth": self.date_of_birth,
             "national_chess_id": self.national_chess_id,
         }
-    
+
     @classmethod
     def transform_from_dict(cls, json_data):
         return cls(
@@ -68,13 +68,13 @@ class InGamePlayer:
         return (f"{self.player.national_chess_id}-"
                 f"{self.player.last_name.title()} "
                 f"{self.player.first_name.title()}")
-    
+
     def transform_to_dict(self):
         return {
             "player": self.player.transform_to_dict(),
             "score": self.score,
         }
-    
+
     @classmethod
     def transform_from_dict(cls, json_data):
         return cls(

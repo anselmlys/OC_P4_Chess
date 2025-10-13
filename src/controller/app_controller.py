@@ -1,9 +1,9 @@
-#Controllers
+# Controllers
 from src.controller.menu_controller import MenuController
 from src.controller.player_controller import PlayerController
 from src.controller.tournament_controller import TournamentController
 
-#Views
+# Views
 from src.view.main_menu_view import MainMenuView
 from src.view.player.menu_view import PlayerMenuView
 from src.view.player.register_view import PlayerRegisterView
@@ -17,7 +17,7 @@ from src.view.tournament.report_view import TournamentReportView
 
 class AppController:
     def launch_app(self):
-        #Instantiate views
+        # Instantiate views
         main_menu_view = MainMenuView()
         player_menu_view = PlayerMenuView()
         player_register_view = PlayerRegisterView()
@@ -28,7 +28,7 @@ class AppController:
         tournament_managing_view = TournamentManagingView()
         tournament_report_view = TournamentReportView()
 
-        #Instantiate controllers
+        # Instantiate controllers
         player_controller = PlayerController(player_register_view,
                                              player_list_view)
         tournament_controller = TournamentController(tournament_creation_view,

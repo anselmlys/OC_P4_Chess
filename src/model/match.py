@@ -10,9 +10,9 @@ class Match:
         self._listeners: list = []
 
     def __repr__(self):
-        return (([{self.player1}, {self.player1.score}], 
+        return (([{self.player1}, {self.player1.score}],
                 [{self.player2}, {self.player2.score}]))
-    
+
     def __str__(self):
         if self.winner == "1":
             return (f"{self.player1} (gagnant) // {self.player2}")
@@ -22,7 +22,7 @@ class Match:
             return (f"(Match nul) {self.player1} // {self.player2}")
         else:
             return ((f"(En cours) {self.player1} // {self.player2}"))
-    
+
     def transform_to_dict(self):
         return {
             "player1": self.player1.transform_to_dict(),
@@ -30,7 +30,7 @@ class Match:
             "finished": self.finished,
             "winner": self.winner,
         }
-    
+
     @classmethod
     def transform_from_dict(cls, json_data):
         player1 = InGamePlayer.transform_from_dict(json_data["player1"])
@@ -39,9 +39,8 @@ class Match:
         match = cls(pair_of_players=pair_of_players)
         match.finished = json_data["finished"]
         match.winner = json_data["winner"]
-        
         return match
-    
+
     def add_listener(self, callback):
         '''Allow observers (here "Round") to listen to changes'''
         self._listeners.append(callback)
@@ -50,7 +49,7 @@ class Match:
         '''Will launch callback functions in listeners when match is done'''
         for callback in self._listeners:
             callback(self)
-    
+
     def end_match(self, winner):
         '''Add the points to the score of the winner and set the match to finished'''
         match winner:
@@ -67,6 +66,5 @@ class Match:
         self.finished = True
         self._notify()
 
-        return (f"([{self.player1}, {self.player1.score}]," 
+        return (f"([{self.player1}, {self.player1.score}],"
                 f"[{self.player2}, {self.player2.score}])")
-    

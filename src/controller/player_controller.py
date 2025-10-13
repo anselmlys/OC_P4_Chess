@@ -3,6 +3,7 @@ from src.model.player import Player
 from src.view.player.register_view import PlayerRegisterView
 from src.view.player.list_view import PlayerListView
 
+
 class PlayerController:
     def __init__(self, register_view: PlayerRegisterView,
                  list_view: PlayerListView):
@@ -19,7 +20,7 @@ class PlayerController:
         try:
             player.save_new_player_information(PLAYER_DB_FILEPATH)
             self.register_view.confirm_player_registered(player.last_name,
-                                                    player.first_name)
+                                                         player.first_name)
         except PermissionError:
             print(f"\nErreur : accès au fichier {PLAYER_DB_FILEPATH} refusé.")
             input("\nPress Enter to continue...\n")

@@ -31,7 +31,7 @@ class TournamentController:
                                 start_date=tournament_start_date,
                                 number_of_rounds=tournament_number_of_rounds,
                                 description=tournament_description)
-        
+
         tournament.add_players(PLAYER_DB_FILEPATH)
         number_of_player = len(tournament.players)
         if (number_of_player % 2) == 0:
@@ -51,7 +51,7 @@ class TournamentController:
             print(("Attention : le nombre de joueur est impair!\n"
                    "Veuillez ajouter un nouveau joueur avant de continuer.\n"))
             input("\nPress Enter to continue...\n")
-            
+
     def select_tournament(self):
         tournament_files = [f.removesuffix('.json') for f in listdir(TOURNAMENT_DB_FOLDER)]
         choice = self.selector_view.prompt_tournament_to_select(tournament_files)
@@ -94,7 +94,7 @@ class TournamentController:
         except Exception as e:
             print(f"\nUne erreur est survenue : {e}")
             input("\nPress Enter to continue...\n")
-    
+
     def start_tournament(self, tournament: Tournament):
         choice = self.managing_view.tournament_start()
         match choice:
@@ -116,13 +116,13 @@ class TournamentController:
 
             case "revenir":
                 return
-            
+
     def end_match(self, tournament: Tournament, round_index: int):
         number_of_matches = len(tournament.rounds[round_index].matches)
         match_number = int(self.managing_view.prompt_match_selection(number_of_matches))
         match_index = match_number - 1
-        winner = self.managing_view.prompt_match_winner(tournament, 
-                                                        round_index, 
+        winner = self.managing_view.prompt_match_winner(tournament,
+                                                        round_index,
                                                         match_index)
         tournament.rounds[round_index].matches[match_index].end_match(winner)
         try:
@@ -136,14 +136,14 @@ class TournamentController:
             input("\nPress Enter to continue...\n")
 
     def create_new_round(self, tournament: Tournament, round_index: int):
-         #Check that the current round is over
+        # Check that the current round is over
         if tournament.rounds[round_index].finished:
-            #Remove pairs who played together from unique pairs list
+            # Remove pairs who played together from unique pairs list
             for previous_pair in tournament.previous_pairs:
                 if previous_pair in tournament.unique_pairs_left:
                     tournament.unique_pairs_left.remove(previous_pair)
 
-            #Check if there are still unique pairs available or not
+            # Check if there are still unique pairs available or not
             if tournament.unique_pairs_left:
                 pair_of_players = tournament.create_unique_pairs()
             else:
@@ -167,9 +167,9 @@ class TournamentController:
 
     def manage_tournament(self, tournament: Tournament):
         round_index = tournament.current_round_number - 1
-        #Check if tournament is already over or not
+        # Check if tournament is already over or not
         if (int(tournament.number_of_rounds) == int(tournament.current_round_number) and
-              tournament.rounds[round_index].finished):
+                tournament.rounds[round_index].finished):
             tournament.end_tournament()
             choice = self.managing_view.tournament_over(tournament)
         else:
@@ -181,8 +181,8 @@ class TournamentController:
             case "tour":
                 self.create_new_round(tournament, round_index)
             case "joueur":
-                players = sorted(tournament.players, 
-                                    key=lambda player: player.player.last_name)
+                players = sorted(tournament.players,
+                                 key=lambda player: player.player.last_name)
                 self.report_view.list_of_players(players)
                 self.manage_tournament(tournament)
             case "info":

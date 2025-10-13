@@ -10,7 +10,7 @@ class PlayerRegisterView:
             return self.prompt_player_last_name()
         else:
             return last_name.lower()
-    
+
     def prompt_player_first_name(self):
         first_name = input("Entrez le prénom du joueur : ")
         if not NAME_FORMAT.match(first_name):
@@ -19,7 +19,7 @@ class PlayerRegisterView:
             return self.prompt_player_first_name()
         else:
             return first_name.lower()
-    
+
     def prompt_player_date_of_birth(self):
         date_of_birth = input("Entrez la date de naissance du joueur en format AAAA-MM-JJ : ")
         if not DATE_FORMAT.match(date_of_birth):
@@ -28,7 +28,7 @@ class PlayerRegisterView:
             return self.prompt_player_date_of_birth()
         else:
             return date_of_birth
-    
+
     def prompt_player_national_chess_id(self):
         national_chess_id = input("Entrez l'identifiant national du joueur : ")
         if not NATIONAL_CHESS_ID_FORMAT.match(national_chess_id):
@@ -37,7 +37,7 @@ class PlayerRegisterView:
             return self.prompt_player_national_chess_id()
         else:
             return national_chess_id
-    
-    def confirm_player_registered(self,last_name, first_name):
+
+    def confirm_player_registered(self, last_name, first_name):
         print(f"{first_name.title()} {last_name.title()} a bien été enregistré !\n")
         input("\nPress Enter to continue...\n")

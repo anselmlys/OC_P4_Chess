@@ -17,30 +17,30 @@ class Round:
         if self.matches:
             for match in self.matches:
                 match.add_listener(self._on_match_finished)
-        
+
     @property
     def finished(self) -> bool:
         return all(match.finished for match in self.matches)
 
     def __repr__(self):
         return self.name
-    
+
     def transform_to_dict(self):
         return {
             "name": self.name,
             "pair_of_players": [
-                [a.transform_to_dict(), b.transform_to_dict()] 
+                [a.transform_to_dict(), b.transform_to_dict()]
                 for a, b in self.pair_of_players
             ],
             "start_datetime": self.start_datetime,
             "end_datetime": self.end_datetime,
             "matches": [match.transform_to_dict() for match in self.matches],
         }
-    
+
     @classmethod
     def transform_from_dict(cls, json_data):
         pair_of_players = [
-                (InGamePlayer.transform_from_dict(a), 
+                (InGamePlayer.transform_from_dict(a),
                  InGamePlayer.transform_from_dict(b))
                 for a, b in json_data["pair_of_players"]
             ]
@@ -60,7 +60,7 @@ class Round:
             match = Match(pair)
             self.matches.append(match)
 
-        #Link observer to the objects (matches) it wants to listen to
+        # Link observer to the objects (matches) it wants to listen to
         for match in self.matches:
             match.add_listener(self._on_match_finished)
 
@@ -68,10 +68,3 @@ class Round:
         '''Contains the function that will be called when matches are done'''
         if self.end_datetime is None and self.finished:
             self.end_datetime = datetime.now().strftime("%Y-%m-%d %H:%M")
-
-
-
-            
-
-            
-

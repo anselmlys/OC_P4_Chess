@@ -31,7 +31,7 @@ class Tournament:
         previous_pairs = []
         for round in self.rounds:
             for a, b in round.pair_of_players:
-                previous_pairs.append(set([a.player.national_chess_id, 
+                previous_pairs.append(set([a.player.national_chess_id,
                                            b.player.national_chess_id]))
         return previous_pairs
 
@@ -57,7 +57,7 @@ class Tournament:
             "unique_pairs_left": unique_pairs_left,
             "db_filepath": self.db_filepath,
         }
-    
+
     @classmethod
     def transform_from_dict(cls, json_data):
         players = [
@@ -100,9 +100,9 @@ class Tournament:
         '''Get all possible unique pairs of players'''
         unique_pairs_in_tuple = combinations(self.players, 2)
         for a, b in unique_pairs_in_tuple:
-            self.unique_pairs_left.append(set([a.player.national_chess_id, 
+            self.unique_pairs_left.append(set([a.player.national_chess_id,
                                                b.player.national_chess_id]))
-    
+
     def create_new_round(self, pair_of_players):
         '''Create a new round in the tournament.'''
         self.current_round_number += 1
@@ -117,44 +117,43 @@ class Tournament:
         while players_list:
             pair = (players_list.pop(0), players_list.pop(0))
             pair_of_players.append(pair)
-            
         return pair_of_players
-    
+
     def create_unique_pairs(self):
         '''Pair together players who have not played against eachother'''
-        #Sort all players based on their scores
+        # Sort all players based on their scores
         sorted_players = self.players.copy()
         sorted_players.sort(key=lambda x: x.score, reverse=True)
 
-        #Shuffle between players who have the same score
+        # Shuffle between players who have the same score
         shuffled_players = []
         for _, group in groupby(sorted_players, key=lambda x: x.score):
             g = list(group)
             random.shuffle(g)
             shuffled_players.extend(g)
 
-        #Pair together the two first players in the shuffled_players list
+        # Pair together the two first players in the shuffled_players list
         pair_of_players = []
         while len(shuffled_players) > 0:
             n = 0
             player_to_pair = shuffled_players.pop(n)
             player_to_pair_with = shuffled_players[n]
-            pair = set({player_to_pair.player.national_chess_id, 
+            pair = set({player_to_pair.player.national_chess_id,
                         player_to_pair_with.player.national_chess_id})
 
-            #Change second player if the pair already played together
+            # Change second player if the pair already played together
             try:
                 while pair in self.previous_pairs:
                     n += 1
                     player_to_pair_with = shuffled_players[n]
-                    pair = set({player_to_pair.national_chess_id, 
+                    pair = set({player_to_pair.national_chess_id,
                                 player_to_pair_with.national_chess_id})
 
-            #Keep original pair if no unique pairs were found
-            except:
+            # Keep original pair if no unique pairs were found
+            except Exception:
                 n = 0
 
-            #Create the tuple for the pair and add it to the list of pairs
+            # Create the tuple for the pair and add it to the list of pairs
             finally:
                 player_to_pair_with = shuffled_players.pop(n)
                 pair = (player_to_pair, player_to_pair_with)
@@ -186,8 +185,8 @@ class Tournament:
             tournament_data = json.load(tournament_file)
             tournament = Tournament.transform_from_dict(tournament_data)
         return tournament
-    
+
     def end_tournament(self):
         if self.end_date is None:
-                self.end_date = date.today().strftime("%Y-%m-%d")
-                self.save_tournament_information()
+            self.end_date = date.today().strftime("%Y-%m-%d")
+            self.save_tournament_information()
