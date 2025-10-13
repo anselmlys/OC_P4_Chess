@@ -10,8 +10,22 @@ class Match:
         self._listeners: list = []
 
     def __repr__(self):
-        return (f"([{self.player1}, {self.player1.score}]," 
-                f"[{self.player2}, {self.player2.score}])")
+        return (([{self.player1}, {self.player1.score}], 
+                [{self.player2}, {self.player2.score}]))
+    
+    def __str__(self):
+        if self.winner == "1":
+            return ((f"{self.player1} - {self.player1.score} (gagnant) // "
+                    f"{self.player2} - {self.player2.score}"))
+        elif self.winner == "2":
+            return ((f"{self.player1} - {self.player1.score} // "
+                    f"{self.player2} - {self.player2.score} (gagnant)"))
+        elif self.winner == "match nul":
+            return ((f"(Match nul) {self.player1} - {self.player1.score} // "
+                    f"{self.player2} - {self.player2.score}"))
+        else:
+            return ((f"(En cours) {self.player1} - {self.player1.score} // "
+                    f"{self.player2} - {self.player2.score}"))
     
     def transform_to_dict(self):
         return {

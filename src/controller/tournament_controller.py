@@ -146,6 +146,7 @@ class TournamentController:
                     self.report_view.list_of_players(players)
                     self.manage_tournament(tournament)
                 case "info":
-                    pass
+                    self.report_view.tournament_info(tournament)
+                    self.manage_tournament(tournament)
                 case "retour":
                     pass
