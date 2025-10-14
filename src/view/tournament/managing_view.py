@@ -18,10 +18,11 @@ class TournamentManagingView:
     def ongoing_tournament(self):
         print(("\n- Cloturer un match : <match>\n"
                "- Créer le prochain tour : <tour>\n"
+               "- Voir le classement : <classement>\n"
                "- Voir liste des joueurs et de leurs scores : <joueur>\n"
                "- Voir les informations du tournoi : <info>\n"
                "- Revenir au menu principal : <retour>\n"))
-        options = ["match", "tour", "joueur", "info", "retour"]
+        options = ["match", "tour", "classement", "joueur", "info", "retour"]
         choice = input("Veuillez entrez une commande: ")
         if choice in options:
             return choice
@@ -34,10 +35,11 @@ class TournamentManagingView:
         print((f"\nLe tournoi {tournament.name.title()} est terminé !\n"
                f"Date de début : {tournament.start_date}\n"
                f"Date de fin : {tournament.end_date}"))
-        print(("\n- Voir liste des joueurs et de leurs scores : <joueur>\n"
+        print(("\n- Voir le classement : <classement>\n"
+               "- Voir liste des joueurs et de leurs scores : <joueur>\n"
                "- Voir les informations du tournoi : <info>\n"
                "- Revenir au menu principal : <retour>\n"))
-        options = ["joueur", "info", "retour"]
+        options = ["classement", "joueur", "info", "retour"]
         choice = input("Veuillez entrez une commande: ")
         if choice in options:
             return choice

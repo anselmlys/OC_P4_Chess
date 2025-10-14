@@ -5,6 +5,15 @@ class TournamentReportView:
             print(tournament)
         input("\nPress Enter to continue...\n")
 
+    def player_rankings(self, ranking_groups: dict):
+        print("\nVoici le classement de ce tournoi : ")
+        rank = 0
+        for _, players in ranking_groups.items():
+            rank += 1
+            for player in players:
+                print(f"{rank} - {player} - score : {player.score:g}")
+        input("\nPress Enter to continue...\n")
+
     def list_of_players(self, players: list):
         print("\nVoici la liste des joueurs du tournoi : ")
         for player in players:

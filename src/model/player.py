@@ -60,7 +60,7 @@ class Player:
 
 
 class InGamePlayer:
-    def __init__(self, player: Player, score: int = 0):
+    def __init__(self, player: Player, score: float = 0):
         self.player = player
         self.score = score
 

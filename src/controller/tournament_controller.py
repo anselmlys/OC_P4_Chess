@@ -1,5 +1,6 @@
 from os import listdir
 from pathlib import Path
+from itertools import groupby
 
 from src.constants import PLAYER_DB_FILEPATH, TOURNAMENT_DB_FOLDER
 from src.view.tournament.creation_view import TournamentCreationView
@@ -176,6 +177,7 @@ class TournamentController:
                 input("\nPress Enter to continue...\n")
         else:
             print("\nLe tour actuel n'est pas terminé ! \n")
+            input("\nPress Enter to continue...\n")
             self.manage_tournament(tournament)
 
     def manage_tournament(self, tournament: Tournament):
@@ -193,6 +195,16 @@ class TournamentController:
                 self.end_match(tournament, round_index)
             case "tour":
                 self.create_new_round(tournament, round_index)
+            case "classement":
+                ranking_groups = {}
+                sorted_players = sorted(tournament.players,
+                                        key=lambda player: player.score,
+                                        reverse=True)
+                for score, group in groupby(sorted_players,
+                                            key=lambda player: player.score):
+                    ranking_groups[score] = list(group)
+                self.report_view.player_rankings(ranking_groups)
+                self.manage_tournament(tournament)
             case "joueur":
                 players = sorted(tournament.players,
                                  key=lambda player: player.player.last_name)
