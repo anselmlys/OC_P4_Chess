@@ -39,5 +39,5 @@ class PlayerRegisterView:
             return national_chess_id
 
     def confirm_player_registered(self, last_name, first_name):
-        print(f"{first_name.title()} {last_name.title()} a bien été enregistré !\n")
+        print(f"\n{first_name.title()} {last_name.title()} a bien été enregistré !\n")
         input("\nPress Enter to continue...\n")

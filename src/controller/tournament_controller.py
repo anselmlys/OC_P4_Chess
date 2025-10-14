@@ -32,25 +32,38 @@ class TournamentController:
                                 number_of_rounds=tournament_number_of_rounds,
                                 description=tournament_description)
 
-        tournament.add_players(PLAYER_DB_FILEPATH)
-        number_of_player = len(tournament.players)
-        if (number_of_player % 2) == 0:
-            try:
-                tournament.create_json_file()
-                tournament.save_tournament_information()
-                print("\nLe tournoi a bien été créé !\n")
-                input("\nPress Enter to continue...\n")
-            except PermissionError:
-                print(("Accès refusé : "
-                       "le tournoi n'a pas été enregistré.\n"))
-                input("\nPress Enter to continue...\n")
-            except Exception as e:
-                print(f"\nUne erreur est survenue : {e}")
-                input("\nPress Enter to continue...\n")
-        else:
-            print(("Attention : le nombre de joueur est impair!\n"
-                   "Veuillez ajouter un nouveau joueur avant de continuer.\n"))
+        try:
+            tournament.add_players(PLAYER_DB_FILEPATH)
+        except FileNotFoundError:
+            print(("\nAttention : Il faut ajouter des joueurs avant "
+                   "de créer un tournoi !\n"))
             input("\nPress Enter to continue...\n")
+        except PermissionError:
+            print(("\nAccès au fichier joueur refusé : "
+                   "le tournoi n'a pas été créé.\n"))
+            input("\nPress Enter to continue...\n")
+        except Exception as e:
+            print(f"\nUne erreur est survenue : {e}")
+            input("\nPress Enter to continue...\n")
+        else:
+            number_of_player = len(tournament.players)
+            if (number_of_player % 2) == 0:
+                try:
+                    tournament.create_json_file()
+                    tournament.save_tournament_information()
+                    print("\nLe tournoi a bien été créé !\n")
+                    input("\nPress Enter to continue...\n")
+                except PermissionError:
+                    print(("\nAccès refusé : "
+                           "le tournoi n'a pas été enregistré.\n"))
+                    input("\nPress Enter to continue...\n")
+                except Exception as e:
+                    print(f"\nUne erreur est survenue : {e}")
+                    input("\nPress Enter to continue...\n")
+            else:
+                print(("\nAttention : le nombre de joueur est impair!\n"
+                       "Veuillez ajouter un nouveau joueur avant de continuer.\n"))
+                input("\nPress Enter to continue...\n")
 
     def select_tournament(self):
         tournament_files = [f.removesuffix('.json') for f in listdir(TOURNAMENT_DB_FOLDER)]

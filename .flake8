@@ -2,8 +2,4 @@
 max-line-length = 119
 format = html
 htmldir = flake8_rapport
-exclude = 
-    env,
-    data,
-    __pycache__,
-    .gitignore
+extend-exclude = env
