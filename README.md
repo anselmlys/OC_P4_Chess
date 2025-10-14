@@ -29,7 +29,7 @@ git clone https://github.com/anselmlys/OC_P4_Chess.git
 ```bash
 python -m venv env
 # On Windows:
-. env\Scripts\activate
+.\env\Scripts\activate
 # On macOS / Linux:
 source env/bin/activate
 ```
