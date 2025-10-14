@@ -138,16 +138,20 @@ class TournamentController:
         winner = self.managing_view.prompt_match_winner(tournament,
                                                         round_index,
                                                         match_index)
-        tournament.rounds[round_index].matches[match_index].end_match(winner)
-        try:
-            tournament.save_tournament_information()
-            self.manage_tournament(tournament)
-        except PermissionError:
-            print(f"\nErreur : accès au fichier {tournament.db_filepath} refusé.")
+        if tournament.rounds[round_index].matches[match_index].finished:
+            print("\nThis match is already over.\n")
             input("\nPress Enter to continue...\n")
-        except Exception as e:
-            print(f"\nUne erreur est survenue : {e}")
-            input("\nPress Enter to continue...\n")
+        else:
+            tournament.rounds[round_index].matches[match_index].end_match(winner)
+            try:
+                tournament.save_tournament_information()
+                self.manage_tournament(tournament)
+            except PermissionError:
+                print(f"\nErreur : accès au fichier {tournament.db_filepath} refusé.")
+                input("\nPress Enter to continue...\n")
+            except Exception as e:
+                print(f"\nUne erreur est survenue : {e}")
+                input("\nPress Enter to continue...\n")
 
     def create_new_round(self, tournament: Tournament, round_index: int):
         # Check that the current round is over
