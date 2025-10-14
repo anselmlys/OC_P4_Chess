@@ -1,3 +1,5 @@
+from pathlib import Path
+
 # Controllers
 from src.controller.menu_controller import MenuController
 from src.controller.player_controller import PlayerController
@@ -38,5 +40,9 @@ class AppController:
         menu_controller = MenuController(main_menu_view, player_menu_view,
                                          tournament_menu_view, player_controller,
                                          tournament_controller)
+
+        # Create data folders if they do not exist yet
+        Path("data/player").mkdir(parents=True, exist_ok=True)
+        Path("data/tournaments").mkdir(parents=True, exist_ok=True)
 
         menu_controller.main_menu_user_choice()
