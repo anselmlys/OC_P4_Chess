@@ -25,16 +25,19 @@ It can be used to manage chess tournaments (register players, manage rounds and 
 git clone https://github.com/anselmlys/OC_P4_Chess.git
 ```
 
-2. Create and activate virtual environment:
+2. Move into the project directory, create and activate virtual environment:
 ```bash
 python -m venv env
-. env/Scripts/activate
+# On Windows:
+. env\Scripts\activate
+# On macOS / Linux:
+source env/bin/activate
 ```
 
-3. Install dependencies:
+3. (Optional) Install dependencies:
 ```bash
-pip install flake8
-pip install flake8-html
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 
@@ -48,16 +51,27 @@ To navigate through the menus, just enter one of the listed commands.
 All modifications done to the registered players or the tournaments are automatically saved in the JSON files.
 
 
+## Code review
+This code has been checked using flake8 and flake8-html.
+
+To run the analysis again:
+```bash
+pip install flake8 flake8-html
+flake8
+```
+
+An HTML report will be generated in the "flake8_rapport" directory.
+
+
 ## Dependencies
 
 - Python 3.10+
-- flake8
-- flake8-html
+- (Optional, for development) flake8, flake8-html
 
 
 ## Notes
 
-The scraper is designed for educational purposes only.
+This app is designed for educational purposes only.
 
 
 ## Author
