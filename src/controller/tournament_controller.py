@@ -139,8 +139,9 @@ class TournamentController:
                                                         round_index,
                                                         match_index)
         if tournament.rounds[round_index].matches[match_index].finished:
-            print("\nThis match is already over.\n")
+            print("\nCe match est déjà terminé.\n")
             input("\nPress Enter to continue...\n")
+            self.manage_tournament(tournament)
         else:
             tournament.rounds[round_index].matches[match_index].end_match(winner)
             try:

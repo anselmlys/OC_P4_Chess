@@ -20,7 +20,7 @@ class TournamentReportView:
             print((f"- {player.player.national_chess_id}- "
                    f"{player.player.last_name.title()} "
                    f"{player.player.first_name.title()} - "
-                   f"Score : {player.score}"))
+                   f"Score : {player.score:g}"))
         input("\nPress Enter to continue...\n")
 
     def tournament_info(self, tournament):
